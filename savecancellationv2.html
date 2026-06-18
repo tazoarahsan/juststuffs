@@ -421,7 +421,20 @@ const OUTCOMES = {
   disc3:{ msg:"Your 50% discount is locked in for the next 3 months. Same numbers, same automations, same data — nothing else changes." },
   disc6:{ msg:"Your 50% discount is locked in for the next 6 months. Everything stays exactly as it is." },
   basic:{ msg:"You're now on the Basic plan at $199/mo. Your data and numbers carried over — nothing was lost." },
-  pause:{ msg:"Your plan is paused. Your numbers stay active and your data is safe — resume anytime from this page." }
+  pause:{ msg:"Your plan is paused. Your numbers stay active and your data is safe — resume anytime from this page." },
+  onboarding:{ msg:"You're booked. Our onboarding team will reach out within one business day to walk you through setup — and your subscription stays active." }
+};
+
+/* Per-reason offer overrides — otherwise the default OFFER1 / OFFER2 are shown.
+   "Found it difficult to use": step 1 = onboarding call + 50% off 3 months (no downgrade);
+   step 2 falls back to the default (50% off 6 months + pause). */
+const REASON_OFFERS = {
+  'Found it difficult to use':{
+    first:{
+      primary:{ic:'phone', title:'Book a free onboarding call', desc:'A specialist walks you through setup 1-on-1 — lists, automations and the dialer, done with you.', outcome:'onboarding'},
+      secondary:{ic:'percent', title:'50% off your next 3 months', desc:'Half off while you get up to speed. Reverts to standard after 3 cycles.', outcome:'disc3'}
+    }
+  }
 };
 
 /* ============================================================
@@ -516,25 +529,27 @@ function render(){
   }
 
   else if(state.step==='offer1'){
+    const o1 = (REASON_OFFERS[state.reason] && REASON_OFFERS[state.reason].first) || OFFER1;
     html = `
       ${steps('mid')}
       <h2 class="m-title" id="mTitle">Before you go…</h2>
       <p class="m-sub">We'd hate to see you leave. Here's an option to make it easier to stay.</p>
       <div class="offers">
-        ${offerCard(OFFER1.primary,true)}
-        ${offerCard(OFFER1.secondary,false)}
+        ${offerCard(o1.primary,true)}
+        ${offerCard(o1.secondary,false)}
       </div>
       <button class="decline" data-action="decline1">No thanks, continue cancelling</button>`;
   }
 
   else if(state.step==='offer2'){
+    const o2 = (REASON_OFFERS[state.reason] && REASON_OFFERS[state.reason].second) || OFFER2;
     html = `
       ${steps('mid')}
       <h2 class="m-title" id="mTitle">One last offer</h2>
       <p class="m-sub">Our best save before you go.</p>
       <div class="offers">
-        ${offerCard(OFFER2.primary,true)}
-        ${offerCard(OFFER2.secondary,false)}
+        ${offerCard(o2.primary,true)}
+        ${offerCard(o2.secondary,false)}
       </div>
       <button class="decline" data-action="decline2">No thanks, continue cancelling</button>`;
   }
@@ -645,7 +660,8 @@ const RESULT_TOAST = {
   disc3:'Discount applied — 50% off for 3 months',
   disc6:'Discount applied — 50% off for 6 months',
   basic:'Switched to Basic — $199/mo',
-  pause:'Plan paused — resume anytime'
+  pause:'Plan paused — resume anytime',
+  onboarding:'Onboarding call booked'
 };
 
 /* ============================================================
