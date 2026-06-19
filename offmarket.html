@@ -62,40 +62,26 @@
   /* (old nav styles removed — replaced by namespaced .rs-header below) */
 
   /* hero */
-  .hero{position:relative;padding:60px 0 66px;overflow:hidden}
-  .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-  .hero-grid>*{min-width:0}
-  .eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--teal);margin-bottom:22px}
-  .eyebrow::before{content:"";width:26px;height:2px;background:var(--amber)}
-  h1{font-size:clamp(36px,4.6vw,56px);font-weight:800}
-  h1 .hl{box-decoration-break:clone;-webkit-box-decoration-break:clone;background:linear-gradient(transparent 60%, rgba(207,78,82,.42) 60%);padding:0 .03em}
-  .hero p.lede{font-size:19px;color:var(--ink-soft);margin:24px 0 30px;max-width:40ch}
-  .hero-cta-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-  .trust{display:flex;align-items:center;gap:16px;margin-top:26px;flex-wrap:wrap;color:var(--ink-soft);font-size:14px}
+  .hero{position:relative;padding:72px 0 0;overflow:hidden}
+  .hero-center{text-align:center;max-width:760px;margin:0 auto;padding:0 26px}
+  .eyebrow{display:flex;align-items:center;gap:9px;color:var(--teal);margin-bottom:22px;justify-content:center}
+  .eyebrow::before{display:none}
+  h1{font-size:clamp(36px,5vw,64px);font-weight:800;text-align:center}
+  h1 .hl{background:linear-gradient(transparent 60%, rgba(207,78,82,.42) 60%);padding:0 .03em;display:inline}
+  .hero p.lede{font-size:19px;color:var(--ink-soft);margin:20px auto 30px;max-width:52ch}
+  .hero-cta-row{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+  .trust{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:22px;flex-wrap:wrap;color:var(--ink-soft);font-size:14px}
   .trust b{color:var(--ink)}
   .stars{color:var(--amber);letter-spacing:2px;font-size:15px}
   .trust .sep{width:1px;height:15px;background:var(--line-strong)}
+  .trust .bullet{display:inline-flex;align-items:center;gap:5px}
+  .trust .bullet::before{content:"•";color:var(--teal);font-size:16px;line-height:1}
 
-  .map-card{position:relative;background:var(--teal-deep);border-radius:24px;padding:22px;box-shadow:var(--shadow);overflow:hidden}
-  .map-card .map-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-  .map-card .map-head .mono{color:rgba(214,232,231,.7)}
-  .map-card .live{display:flex;align-items:center;gap:7px;color:#bfe6e2;font-family:'Gilroy','Poppins',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
-  .map-card .live .pulse{width:8px;height:8px;border-radius:50%;background:var(--amber);animation:livepulse 2.2s infinite}
-  @keyframes livepulse{0%{box-shadow:0 0 0 0 rgba(232,163,61,.55)}70%{box-shadow:0 0 0 9px rgba(232,163,61,0)}100%{box-shadow:0 0 0 0 rgba(232,163,61,0)}}
-  .map-svg{display:block;width:100%;height:auto;border-radius:14px;background:#0a4248}
-  .pin{transform-origin:center;animation:drop .6s cubic-bezier(.2,.8,.2,1) both}
-  .pin.found{animation-delay:.15s}.pin.p2{animation-delay:.45s}.pin.p3{animation-delay:.75s}.pin.p4{animation-delay:1.05s}.pin.p5{animation-delay:1.35s}
-  @keyframes drop{0%{opacity:0;transform:translateY(-16px) scale(.6)}100%{opacity:1;transform:translateY(0) scale(1)}}
-  .ring{transform-origin:center;animation:ring 2.6s ease-out infinite;animation-delay:1.6s}
-  @keyframes ring{0%{r:6;opacity:.8}100%{r:30;opacity:0}}
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
-  .chip{display:inline-flex;align-items:center;gap:6px;background:rgba(214,232,231,.1);border:1px solid rgba(214,232,231,.2);color:#dbeae8;border-radius:100px;padding:6px 12px;font-size:12.5px;font-family:'Gilroy','Poppins',monospace;letter-spacing:.02em}
-  .chip svg{flex:none}
-  @media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:40px}.hero{padding:42px 0 52px}.hero p.lede{max-width:52ch}.map-card{order:-1}.hero-shot{order:-1}}
+  /* hero screenshot — full-width below copy */
+  .hero-shot{margin:44px auto 0;max-width:960px;padding:0 26px;border-radius:0;overflow:visible;box-shadow:none;border:none;background:transparent;line-height:0}
+  .hero-shot img{display:block;width:100%;height:auto;border-radius:18px;box-shadow:var(--shadow);border:1px solid var(--line)}
 
-  /* hero product shot */
-  .hero-shot{margin:0;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line);background:#fff;line-height:0}
-  .hero-shot img{display:block;width:100%;height:auto}
+  @media(max-width:640px){.hero{padding:52px 0 0}.hero p.lede{font-size:17px}}
 
   /* match band */
   .band{padding:84px 0}
@@ -322,11 +308,10 @@
   <div class="wrap hero-grid">
     <div>
       <span class="eyebrow mono">For real estate investors</span>
-      <h1>Find the off-market deals <span class="hl">the MLS never shows you.</span></h1>
-      <p class="lede">Pull a targeted list of off-market owners, stack your lists to surface the most motivated sellers, then start marketing — cold calls, direct mail, and drip. All in one app.</p>
+      <h1>Find the off-market deals<br><span class="hl">the MLS never shows you.</span></h1>
+      <p class="lede" style="text-align:center">Pull a targeted list of off-market owners, stack your lists to surface the most motivated sellers, then start marketing — cold calls, direct mail, and drip. All in one app.</p>
       <div class="hero-cta-row">
         <a class="cta" href="#start">Start Your 30-Day Free Trial <span class="arrow">→</span></a>
-        <a class="cta ghost" href="#how">See how it works ↓</a>
       </div>
       <div class="trust">
         <span><span class="stars">★★★★★</span> <b>4.9</b> · 2,400+ investors</span>
