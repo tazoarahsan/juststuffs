@@ -391,10 +391,13 @@ const ICONS = {
 const icon = (n)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]||''}</svg>`;
 
 /* ============================================================
-   Reasons are still captured (useful signal), but every path now
-   sees the SAME two save screens, then cancel:
-     1) 50% off 3 months  +  downgrade to Basic
-     2) 50% off 6 months  +  pause
+   Reasons are still captured (useful signal), with save screens
+   tailored by cancellation reason.
+
+   For "Found it difficult to use":
+     1) onboarding only
+     2) 50% off 3 months only
+   No pause-plan option is shown for this path.
    ============================================================ */
 const REASON_LABELS = [
   'Too expensive',
@@ -426,13 +429,15 @@ const OUTCOMES = {
 };
 
 /* Per-reason offer overrides — otherwise the default OFFER1 / OFFER2 are shown.
-   "Found it difficult to use": step 1 = onboarding call + 50% off 3 months (no downgrade);
-   step 2 falls back to the default (50% off 6 months + pause). */
+   "Found it difficult to use": step 1 = onboarding call only;
+   step 2 = 50% off 3 months only. No pause-plan option. */
 const REASON_OFFERS = {
   'Found it difficult to use':{
     first:{
-      primary:{ic:'phone', title:'Book a free onboarding call', desc:'A specialist walks you through setup 1-on-1 — lists, automations and the dialer, done with you.', outcome:'onboarding'},
-      secondary:{ic:'percent', title:'50% off your next 3 months', desc:'Half off while you get up to speed. Reverts to standard after 3 cycles.', outcome:'disc3'}
+      primary:{ic:'phone', title:'Book a free onboarding call', desc:'A specialist walks you through setup 1-on-1 — lists, automations and the dialer, done with you.', outcome:'onboarding'}
+    },
+    second:{
+      primary:{ic:'percent', title:'50% off your next 3 months', desc:'Half off while you get up to speed. Reverts to standard after 3 cycles.', outcome:'disc3'}
     }
   }
 };
@@ -535,8 +540,8 @@ function render(){
       <h2 class="m-title" id="mTitle">Before you go…</h2>
       <p class="m-sub">We'd hate to see you leave. Here's an option to make it easier to stay.</p>
       <div class="offers">
-        ${offerCard(o1.primary,true)}
-        ${offerCard(o1.secondary,false)}
+        ${o1.primary ? offerCard(o1.primary,true) : ''}
+        ${o1.secondary ? offerCard(o1.secondary,false) : ''}
       </div>
       <button class="decline" data-action="decline1">No thanks, continue cancelling</button>`;
   }
@@ -548,8 +553,8 @@ function render(){
       <h2 class="m-title" id="mTitle">One last offer</h2>
       <p class="m-sub">Our best save before you go.</p>
       <div class="offers">
-        ${offerCard(o2.primary,true)}
-        ${offerCard(o2.secondary,false)}
+        ${o2.primary ? offerCard(o2.primary,true) : ''}
+        ${o2.secondary ? offerCard(o2.secondary,false) : ''}
       </div>
       <button class="decline" data-action="decline2">No thanks, continue cancelling</button>`;
   }
