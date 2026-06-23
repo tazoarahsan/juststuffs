@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -169,7 +170,7 @@ svg{width:1em;height:1em;display:block}
 .modal--calendar{max-width:1040px;padding:26px;}
 .modal__controls{position:sticky;top:0;z-index:3;display:flex;justify-content:space-between;align-items:center;margin:-14px -14px 12px;pointer-events:none;}
 .modal__nav{display:flex;gap:8px;pointer-events:auto;}
-.modal__iconbtn{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink-2);display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow-sm);font-size:18px;}
+.modal__iconbtn{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink-2);display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow-sm);font-size:18px;pointer-events:auto;}
 .modal__iconbtn:hover{background:#f3f4f6;color:var(--ink);}
 .modal__iconbtn:disabled{opacity:.7;cursor:not-allowed;background:#f8f9fb;color:#98a2b3;}
 .modal__iconbtn svg{width:18px;height:18px;}
@@ -442,7 +443,7 @@ const OUTCOMES = {
   disc3:{ msg:"Your 50% discount is locked in for the next 3 months. Same numbers, same automations, same data — nothing else changes." },
   basic:{ msg:"You're now on the Basic plan at $199/mo. Your data and numbers carried over — nothing was lost." },
   pause:{ msg:"Your plan is paused. Your numbers stay active and your data is safe — resume anytime from this page." },
-  accountManager:{ msg:"Your account manager call is ready to book. Choose a time on the calendar and your subscription stays active." }
+  accountManager:{ msg:"Your call has been booked with your account manager. They will help you work through any difficulties, answer your questions, and make sure you get the support you need." }
 };
 
 /* Per-reason offer overrides */
@@ -604,7 +605,7 @@ function render(){
         <img src="${CALENDAR_IMAGE}" alt="REsimpli account manager calendar booking interface" />
       </div>
       <p class="calendar-note">This prototype uses the supplied embedded calendar interface screenshot.</p>
-      <button class="btn btn--primary btn--full" data-action="calendarBooked">Done</button>`;
+      <button class="btn btn--primary btn--full" data-action="calendarBooked">Confirm booking</button>`;
   }
 
   else if(state.step==='confirm'){
@@ -615,7 +616,7 @@ function render(){
       ${steps('confirm')}
       <div class="glyph glyph--x">${icon('x')}</div>
       <h2 class="m-title" id="mTitle">Confirm cancellation</h2>
-      <p class="m-sub">Numbers released · data deleted in 30 days · access ends today${productCopy}</p>
+      <p class="m-sub">Access continues until the end of your current billing period · numbers released after access ends · data deleted 30 days later${productCopy}</p>
       <div class="m-actions">
         <button class="btn btn--primary" data-action="keep">Keep subscription</button>
         <button class="btn btn--danger-ghost" data-action="submitCancel">Submit &amp; cancel</button>
@@ -676,7 +677,11 @@ modal.addEventListener('click', (e)=>{
       goStep('confirm');
       break;
     case 'accept':      acceptOffer(el.dataset.outcome); break;
-    case 'calendarBooked': acceptOffer('accountManager'); break;
+    case 'calendarBooked':
+      state.result = {type:'saved', outcome:'accountManager'};
+      state.step = 'saved';
+      render();
+      break;
     case 'submitCancel':state.result={type:'cancelled'}; state.step='cancelled'; render(); break;
   }
 });
@@ -740,7 +745,7 @@ const RESULT_TOAST = {
   disc3:'Discount applied — 50% off for 3 months',
   basic:'Switched to Basic — $199/mo',
   pause:'Plan paused — resume anytime',
-  accountManager:'Account manager calendar opened'
+  accountManager:'Account manager call booked'
 };
 
 /* ============================================================
