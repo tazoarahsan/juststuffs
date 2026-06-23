@@ -167,11 +167,11 @@ svg{width:1em;height:1em;display:block}
 .overlay.is-open .modal{transform:translateY(0) scale(1);opacity:1}
 
 .modal--calendar{max-width:1040px;padding:26px;}
-.modal__controls{position:sticky;top:-26px;z-index:3;display:flex;justify-content:space-between;align-items:center;margin:-8px -8px 10px;pointer-events:none;}
+.modal__controls{position:sticky;top:0;z-index:3;display:flex;justify-content:space-between;align-items:center;margin:-14px -14px 12px;pointer-events:none;}
 .modal__nav{display:flex;gap:8px;pointer-events:auto;}
 .modal__iconbtn{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink-2);display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow-sm);font-size:18px;}
 .modal__iconbtn:hover{background:#f3f4f6;color:var(--ink);}
-.modal__iconbtn:disabled{opacity:.38;cursor:not-allowed;background:#f8f9fb;color:#98a2b3;}
+.modal__iconbtn:disabled{opacity:.7;cursor:not-allowed;background:#f8f9fb;color:#98a2b3;}
 .modal__iconbtn svg{width:18px;height:18px;}
 .field{display:flex;flex-direction:column;gap:8px;margin:4px 0 20px;}
 .field label{font-size:13px;font-weight:800;color:var(--ink);}
@@ -392,6 +392,7 @@ svg{width:1em;height:1em;display:block}
 const ICONS = {
   percent:'<line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
   down:'<path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>',
+  arrowLeft:'<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
   pause:'<rect x="6" y="5" width="3.6" height="14" rx="1.2"/><rect x="14.4" y="5" width="3.6" height="14" rx="1.2"/>',
   phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
   shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>',
@@ -513,7 +514,7 @@ function modalControls(){
   const canBack = state.history.length > 0 && !['saved','cancelled'].includes(state.step);
   return `<div class="modal__controls">
     <div class="modal__nav">
-      <button class="modal__iconbtn" data-action="back" aria-label="Go back" title="Back" ${canBack?'':'disabled'}>${icon('down')}</button>
+      <button class="modal__iconbtn" data-action="back" aria-label="Go back" title="Back" ${canBack?'':'disabled'}>${icon('arrowLeft')}</button>
     </div>
     <button class="modal__iconbtn" data-action="close" aria-label="Close cancellation flow" title="Close">${icon('x')}</button>
   </div>`;
@@ -562,7 +563,7 @@ function render(){
     html = `
       ${steps('mid')}
       <h2 class="m-title" id="mTitle">${isShutdown?'Pause instead of cancelling':'Before you go…'}</h2>
-      <p class="m-sub">${isShutdown?'You can keep your account safe while the business is inactive.':'We'd hate to see you leave. Here's an option to make it easier to stay.'}</p>
+      <p class="m-sub">${isShutdown?'You can keep your account safe while the business is inactive.':'We would hate to see you leave. Here is an option to make it easier to stay.'}</p>
       <div class="offers">
         ${o1.primary ? offerCard(o1.primary,true) : ''}
         ${o1.secondary ? offerCard(o1.secondary,false) : ''}
@@ -614,7 +615,7 @@ function render(){
       ${steps('confirm')}
       <div class="glyph glyph--x">${icon('x')}</div>
       <h2 class="m-title" id="mTitle">Confirm cancellation</h2>
-      <p class="m-sub">Access remains active until the end of your current billing period. On your next billing date, your subscription will not renew. After access ends, your numbers will be released and your data will be deleted 30 days later.${productCopy}</p>
+      <p class="m-sub">Numbers released · data deleted in 30 days · access ends today${productCopy}</p>
       <div class="m-actions">
         <button class="btn btn--primary" data-action="keep">Keep subscription</button>
         <button class="btn btn--danger-ghost" data-action="submitCancel">Submit &amp; cancel</button>
@@ -635,7 +636,7 @@ function render(){
     html = `
       <div class="glyph glyph--x">${icon('x')}</div>
       <h2 class="m-title" id="mTitle">Your subscription is cancelled</h2>
-      <p class="m-sub">Your subscription will not renew. You’ll keep access until the end of your current billing period — the date your next payment would have been charged. After access ends, your numbers will be released and your data will be deleted 30 days later.${productCopy} Sorry to see you go — you're welcome back anytime.</p>
+      <p class="m-sub">You'll keep access until <strong>Jul 17, 2026</strong>. After that your numbers are released and your data is deleted in 30 days.${productCopy} Sorry to see you go — you're welcome back anytime.</p>
       <button class="btn btn--primary btn--full" data-action="close">Back to billing</button>`;
   }
 
@@ -721,7 +722,7 @@ function closeModal(){
   if(state.result && state.result.type==='saved'){
     toast(RESULT_TOAST[state.result.outcome] || 'Offer applied');
   } else if(state.result && state.result.type==='cancelled'){
-    toast('Subscription cancelled — access remains through your current billing period', false);
+    toast('Subscription cancelled — access until Jul 17, 2026', false);
   }
   if(lastFocus) lastFocus.focus();
 }
