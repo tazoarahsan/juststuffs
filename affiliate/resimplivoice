@@ -1,0 +1,609 @@
+<!--
+  REsimpli × Ty Franklin — Affiliate Landing Page (THIRD PERSON, v1)
+  Same as Ty's affiliate page, narrated about Ty in third person (no "I"/"my").
+  Brand: teal #008088 / coral #CF4E52 / Poppins
+  Primary CTA: Start Your 14-Day Free Trial
+  NOTE FOR TAZOAR:
+    - Swap CTA hrefs (search "AFFILIATE_LINK") with Ty's real tracked trial URL.
+    - Swap CSS-mock UI cards for real product screenshots where marked "SCREENSHOT".
+    - Drop in a real photo of Ty where marked "TY_PHOTO".
+-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Ty Franklin Runs His Real Estate Business on REsimpli</title>
+<meta name="description" content="Real estate investor Ty Franklin shows exactly how he uses REsimpli to cut software costs, build lists, automate follow-up, and close more deals. Start your 14-day free trial.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --teal:#008088; --teal-dark:#006066; --teal-deep:#003d40;
+    --teal-tint:#E6F2F2; --teal-soft:#F2F9F9;
+    --coral:#CF4E52; --coral-dark:#B83E42;
+    --ink:#16292b; --muted:#5d6f70; --line:#dfeaea;
+    --bg:#ffffff; --bg-soft:#F4FAFA;
+    --shadow:0 18px 40px -22px rgba(0,64,67,.45);
+    --shadow-sm:0 6px 18px -10px rgba(0,64,67,.4);
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; font-family:'Poppins',system-ui,sans-serif; color:var(--ink);
+    background:var(--bg); line-height:1.55; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{line-height:1.12; margin:0; letter-spacing:-.02em; font-weight:800}
+  p{margin:0}
+  a{color:inherit}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 22px}
+  .accent{color:var(--coral)}
+  .teal{color:var(--teal)}
+  .strike{text-decoration:line-through; color:var(--muted); text-decoration-color:var(--coral); text-decoration-thickness:2px}
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex; align-items:center; gap:9px; cursor:pointer;
+    font-weight:700; font-size:1rem; text-decoration:none; border:0;
+    padding:15px 28px; border-radius:999px; transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn-primary{background:var(--coral); color:#fff; box-shadow:0 12px 26px -12px rgba(207,78,82,.8)}
+  .btn-primary:hover{background:var(--coral-dark); transform:translateY(-2px)}
+  .btn-ghost{background:transparent; color:var(--teal); border:2px solid var(--teal); padding:13px 26px}
+  .btn-ghost:hover{background:var(--teal); color:#fff}
+  .btn-sm{padding:11px 20px; font-size:.92rem}
+  .btn .arrow{transition:transform .15s ease}
+  .btn:hover .arrow{transform:translateX(3px)}
+
+  /* ---------- header ---------- */
+  header{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.92); backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
+  .nav{display:flex; align-items:center; justify-content:space-between; padding:13px 0}
+  .brand{display:flex; align-items:center; gap:12px; font-weight:800; font-size:1.25rem; color:var(--teal); text-decoration:none}
+  .brand .dot{width:11px; height:11px; border-radius:50%; background:var(--coral); display:inline-block}
+  .brand small{display:block; font-size:.62rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin-top:-2px}
+  .nav-cta{display:flex; align-items:center; gap:14px}
+  .nav-note{font-size:.82rem; color:var(--muted); font-weight:500}
+  @media(max-width:720px){ .nav-note{display:none} }
+
+  /* ---------- hero ---------- */
+  .hero{background:linear-gradient(180deg,#fff 0%, var(--teal-soft) 100%); padding:54px 0 64px; position:relative; overflow:hidden}
+  .hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:48px; align-items:center}
+  .eyebrow{display:inline-flex; align-items:center; gap:8px; background:var(--teal-tint); color:var(--teal-dark); font-weight:700; font-size:.8rem; letter-spacing:.04em; text-transform:uppercase; padding:7px 14px; border-radius:999px; margin-bottom:20px}
+  .hero h1{font-size:3.05rem; font-weight:900}
+  .hero h1 .accent{position:relative}
+  .hero .sub{font-size:1.18rem; color:var(--muted); margin-top:20px; max-width:540px}
+  .hero-cta{display:flex; align-items:center; gap:16px; margin-top:30px; flex-wrap:wrap}
+  .hero-micro{font-size:.86rem; color:var(--muted); margin-top:14px; display:flex; align-items:center; gap:8px}
+  .check{color:var(--teal); font-weight:800}
+  .trust-strip{display:flex; align-items:center; gap:22px; margin-top:30px; flex-wrap:wrap; font-size:.9rem; color:var(--muted)}
+  .stars{color:#F5A623; letter-spacing:1px; font-size:1rem}
+  .trust-strip b{color:var(--ink)}
+
+  /* hero bill card */
+  .bill{background:#fff; border-radius:var(--radius); box-shadow:var(--shadow); padding:24px; border:1px solid var(--line)}
+  .bill-head{display:flex; align-items:center; justify-content:space-between; padding-bottom:14px; border-bottom:1px dashed var(--line); margin-bottom:8px}
+  .bill-head h4{font-size:.95rem; font-weight:700; margin:0}
+  .bill-tag{font-size:.72rem; font-weight:700; color:var(--coral); background:#fdeef0; padding:4px 10px; border-radius:999px}
+  .bill-row{display:flex; justify-content:space-between; align-items:center; padding:11px 0; border-bottom:1px solid var(--teal-soft); font-size:.95rem}
+  .bill-row span:first-child{color:var(--ink); font-weight:500}
+  .bill-row.kept{color:var(--teal); font-weight:700}
+  .bill-row.kept .pill{background:var(--teal); color:#fff; font-size:.7rem; padding:3px 9px; border-radius:999px; font-weight:700; margin-left:8px}
+  .bill-total{display:flex; justify-content:space-between; align-items:baseline; margin-top:14px; padding-top:14px; border-top:2px solid var(--ink)}
+  .bill-total .lbl{font-weight:700}
+  .bill-total .amt{font-size:1.5rem; font-weight:900; color:var(--teal)}
+  .bill-total .was{font-size:.85rem; margin-left:8px}
+
+  /* ---------- section scaffolding ---------- */
+  section{padding:72px 0}
+  .sec-eyebrow{display:inline-block; color:var(--coral); font-weight:800; font-size:.82rem; letter-spacing:.08em; text-transform:uppercase; margin-bottom:14px}
+  .sec-title{font-size:2.3rem; font-weight:900; max-width:760px}
+  .sec-sub{font-size:1.1rem; color:var(--muted); margin-top:16px; max-width:660px}
+  .center{text-align:center; margin-left:auto; margin-right:auto}
+
+  /* meet ty */
+  .meet{background:var(--bg-soft)}
+  .meet-grid{display:grid; grid-template-columns:.8fr 1.2fr; gap:44px; align-items:center}
+  .ty-photo{aspect-ratio:1/1; border-radius:24px; background:linear-gradient(135deg,var(--teal),var(--teal-deep)); display:flex; align-items:center; justify-content:center; color:#fff; position:relative; overflow:hidden; box-shadow:var(--shadow)}
+  .ty-photo .initials{font-size:5rem; font-weight:900; opacity:.92}
+  .ty-photo img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; z-index:1}
+  .ty-photo .badge{position:absolute; bottom:16px; left:16px; right:16px; z-index:2; background:rgba(255,255,255,.14); backdrop-filter:blur(6px); border:1px solid rgba(255,255,255,.25); border-radius:12px; padding:12px 14px; font-size:.85rem; color:#fff; text-align:left}
+  .meet h2{font-size:2.1rem; font-weight:900}
+  .meet p{color:var(--muted); font-size:1.08rem; margin-top:16px}
+  .meet p strong{color:var(--ink)}
+  .ty-quote{margin-top:22px; border-left:4px solid var(--coral); padding:6px 0 6px 18px; font-size:1.15rem; font-weight:600; color:var(--ink); font-style:italic}
+
+  /* feature block */
+  .feature{display:grid; grid-template-columns:1fr 1fr; gap:52px; align-items:center}
+  .feature.flip .ftext{order:2}
+  .feature + .feature{margin-top:78px}
+  .ftag{display:inline-flex; align-items:center; gap:8px; font-size:.8rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:var(--teal); background:var(--teal-tint); padding:6px 13px; border-radius:999px; margin-bottom:16px}
+  .ftext h3{font-size:1.85rem; font-weight:900}
+  .ftext p{color:var(--muted); font-size:1.06rem; margin-top:14px}
+  .ftext .lede{color:var(--ink); font-weight:600; font-size:1.12rem}
+  .save-chip{display:inline-flex; align-items:center; gap:8px; margin-top:20px; background:#eafaf3; color:#0b7a52; font-weight:800; padding:10px 16px; border-radius:12px; font-size:1rem; border:1px solid #cdeede}
+  .save-chip .big{font-size:1.15rem}
+
+  /* visual cards inside features */
+  .vcard{background:#fff; border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden}
+  .vcard-top{background:var(--teal-deep); color:#fff; padding:14px 18px; font-size:.85rem; font-weight:600; display:flex; align-items:center; gap:8px}
+  .vcard-top .dot{width:8px;height:8px;border-radius:50%;background:#5ee0c0}
+  .vcard-body{padding:20px}
+
+  .compare{display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow)}
+  .compare .col{padding:24px}
+  .compare .them{background:#fbf3f3; border-right:1px solid var(--line)}
+  .compare .us{background:#fff}
+  .compare .ch{font-size:.78rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; margin-bottom:10px}
+  .compare .them .ch{color:var(--coral)}
+  .compare .us .ch{color:var(--teal)}
+  .compare .price{font-size:2rem; font-weight:900; line-height:1}
+  .compare .them .price{color:var(--muted)}
+  .compare .us .price{color:var(--teal)}
+  .compare .price small{font-size:.85rem; font-weight:600; color:var(--muted)}
+  .compare .note{font-size:.88rem; color:var(--muted); margin-top:10px}
+
+  /* skip trace tiers */
+  .tiers{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+  .tier{border:1px solid var(--line); border-radius:14px; padding:18px; text-align:center; background:#fff}
+  .tier .pname{font-size:.78rem; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:var(--teal); margin-bottom:6px}
+  .tier .num{font-size:1.6rem; font-weight:900; color:var(--ink)}
+  .tier .lbl{font-size:.78rem; color:var(--muted)}
+  .tier.mid{border-color:var(--teal); box-shadow:var(--shadow-sm)}
+
+  /* drip timeline */
+  .timeline{position:relative; padding-left:30px}
+  .timeline::before{content:""; position:absolute; left:9px; top:6px; bottom:6px; width:2px; background:var(--teal-tint)}
+  .tl-item{position:relative; padding:12px 0}
+  .tl-item .pip{position:absolute; left:-26px; top:16px; width:14px; height:14px; border-radius:50%; background:#fff; border:3px solid var(--teal)}
+  .tl-item .day{font-size:.74rem; font-weight:800; color:var(--coral); letter-spacing:.04em}
+  .tl-item .act{font-weight:600; font-size:.98rem; margin-top:2px}
+  .tl-item .meta{font-size:.85rem; color:var(--muted)}
+
+  /* call summary card rows */
+  .summary-row{display:flex; gap:12px; padding:11px 0; border-bottom:1px solid var(--teal-soft); font-size:.92rem}
+  .summary-row:last-child{border-bottom:0}
+  .summary-row .k{font-weight:700; color:var(--teal); min-width:120px}
+  .summary-row .v{color:var(--muted)}
+
+  /* savings totalizer */
+  .totalizer{background:linear-gradient(135deg,var(--teal),var(--teal-deep)); color:#fff; border-radius:26px; padding:48px 40px; text-align:center; box-shadow:var(--shadow); position:relative; overflow:hidden}
+  .totalizer .lead{font-size:1.05rem; opacity:.85; font-weight:600}
+  .totalizer .stack{display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin:22px 0 26px}
+  .totalizer .item{background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.22); border-radius:14px; padding:14px 18px; min-width:150px}
+  .totalizer .item .amt{font-size:1.4rem; font-weight:900}
+  .totalizer .item .what{font-size:.78rem; opacity:.82; margin-top:2px}
+  .totalizer .grand{font-size:1.05rem; opacity:.85; margin-top:8px}
+  .totalizer .bignum{font-size:4rem; font-weight:900; line-height:1; margin-top:8px; letter-spacing:-.03em}
+  .totalizer .fine{font-size:.8rem; opacity:.7; max-width:560px; margin:18px auto 0}
+  .totalizer .btn{margin-top:26px}
+
+  /* social proof */
+  .proof{background:var(--bg-soft)}
+  .proof-stats{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-top:36px}
+  .pstat{background:#fff; border:1px solid var(--line); border-radius:16px; padding:24px; text-align:center}
+  .pstat .n{font-size:2rem; font-weight:900; color:var(--teal)}
+  .pstat .l{font-size:.86rem; color:var(--muted); margin-top:4px}
+
+  /* pricing */
+  .pricing .center{max-width:760px}
+  .plans{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:44px; align-items:stretch}
+  .plan{background:#fff; border:1px solid var(--line); border-radius:20px; padding:28px 24px; display:flex; flex-direction:column; position:relative}
+  .plan.popular{border:2px solid var(--teal); box-shadow:var(--shadow)}
+  .plan .pop-badge{position:absolute; top:-13px; left:50%; transform:translateX(-50%); background:var(--coral); color:#fff; font-size:.72rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase; padding:5px 14px; border-radius:999px; white-space:nowrap}
+  .plan .pname{font-size:.82rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--teal)}
+  .plan .price{font-size:2.6rem; font-weight:900; line-height:1; margin-top:10px}
+  .plan .price span{font-size:.95rem; font-weight:600; color:var(--muted)}
+  .plan .billed{font-size:.8rem; color:var(--muted); margin-top:4px}
+  .plan .who{font-size:.92rem; color:var(--ink); font-weight:600; margin-top:14px}
+  .plan .skip{margin-top:12px; background:var(--teal-tint); color:var(--teal-dark); font-size:.82rem; font-weight:700; padding:8px 12px; border-radius:10px; text-align:center}
+  .plan .btn{margin-top:auto; justify-content:center; width:100%}
+  .plan .pbtn-top{margin-top:22px}
+  .plan.popular .btn{background:var(--coral)}
+
+  .includes{margin-top:40px; background:var(--bg-soft); border:1px solid var(--line); border-radius:20px; padding:30px}
+  .includes h4{text-align:center; font-size:1.05rem; font-weight:800; margin-bottom:20px}
+  .inc-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px 28px}
+  .inc-grid li{list-style:none; display:flex; align-items:center; gap:9px; font-size:.92rem; color:var(--ink); padding:5px 0}
+  .inc-grid .tick{color:var(--teal); font-weight:900; flex:0 0 auto}
+  .inc-grid{padding:0; margin:0}
+
+  /* final cta */
+  .final{background:var(--teal-deep); color:#fff; text-align:center}
+  .final h2{font-size:2.5rem; font-weight:900}
+  .final p{color:rgba(255,255,255,.8); font-size:1.15rem; margin-top:16px; max-width:620px; margin-left:auto; margin-right:auto}
+  .final .btn{margin-top:30px}
+  .final .bonus{margin-top:22px; font-size:.92rem; color:rgba(255,255,255,.75)}
+  .final .bonus b{color:#fff}
+
+  footer{background:#0b1f21; color:rgba(255,255,255,.6); padding:30px 0; font-size:.85rem}
+  .foot{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px}
+
+  /* sticky mobile cta */
+  .mobile-bar{position:fixed; left:0; right:0; bottom:0; z-index:60; background:#fff; border-top:1px solid var(--line); padding:12px 16px; display:none; box-shadow:0 -8px 24px -16px rgba(0,0,0,.4)}
+  .mobile-bar .btn{width:100%; justify-content:center}
+
+  /* reveal */
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease}
+  .reveal.in{opacity:1; transform:none}
+  @media (prefers-reduced-motion:reduce){ .reveal{opacity:1; transform:none; transition:none} html{scroll-behavior:auto} }
+
+  /* ---------- responsive ---------- */
+  @media(max-width:880px){
+    .hero-grid,.meet-grid,.feature{grid-template-columns:1fr; gap:32px}
+    .feature.flip .ftext{order:0}
+    .hero h1{font-size:2.4rem}
+    .sec-title,.meet h2,.final h2{font-size:1.8rem}
+    .ftext h3{font-size:1.5rem}
+    .proof-stats{grid-template-columns:repeat(2,1fr)}
+    .totalizer .bignum{font-size:2.8rem}
+    .tiers{grid-template-columns:1fr}
+    .plans{grid-template-columns:1fr}
+    .inc-grid{grid-template-columns:1fr 1fr}
+    section{padding:54px 0}
+    .mobile-bar{display:block}
+    body{padding-bottom:74px}
+    .nav-cta .btn-ghost{display:none}
+  }
+</style>
+
+<!-- ===================== HEADER ===================== -->
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top">
+      <span class="dot"></span>
+      REsimpli
+      <small>Ty Franklin's setup</small>
+    </a>
+    <div class="nav-cta">
+      <span class="nav-note">Ty's pick for real estate investors</span>
+      <a class="btn btn-primary btn-sm" href="#AFFILIATE_LINK">Start 14-Day Free Trial</a>
+    </div>
+  </div>
+</header>
+
+<a id="top"></a>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">★ Recommended by Ty Franklin</span>
+      <h1>Ty Franklin runs his real estate business on one CRM — and <span class="accent">cuts thousands</span> in software costs.</h1>
+      <p class="sub">Ty replaced a stack of expensive tools with one CRM. Same work — way less money, zero leads slipping through the cracks.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#AFFILIATE_LINK">Start Your 14-Day Free Trial <span class="arrow">→</span></a>
+        <a class="btn btn-ghost" href="#savings">See how Ty saves money</a>
+      </div>
+      <p class="hero-micro"><span class="check">✓</span> Try the exact setup Ty uses — no risk, cancel anytime.</p>
+      <div class="trust-strip">
+        <span><span class="stars">★★★★★</span> <b>4.9/5</b> across every platform</span>
+        <span><b>2,547+</b> reviews</span>
+        <span><b>#1</b> Real Estate CRM on G2</span>
+      </div>
+    </div>
+
+    <!-- TY's software bill: before/after -->
+    <div class="bill reveal">
+      <div class="bill-head">
+        <h4>Ty's old software bill</h4>
+        <span class="bill-tag">Replaced</span>
+      </div>
+      <div class="bill-row"><span class="strike">DocuSign</span><span class="strike">$25/mo</span></div>
+      <div class="bill-row"><span class="strike">PropStream (lists)</span><span class="strike">$97/mo</span></div>
+      <div class="bill-row"><span class="strike">Skip tracing vendor</span><span class="strike">$1,500/mo</span></div>
+      <div class="bill-row"><span class="strike">Separate dialer + CRM</span><span class="strike">$149/mo</span></div>
+      <div class="bill-row kept"><span>REsimpli <span class="pill">all of it, in one</span></span><span>1 plan</span></div>
+      <div class="bill-total">
+        <span class="lbl">Saving roughly</span>
+        <span><span class="amt">$1,600+</span><span class="was muted">/mo</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MEET TY ===================== -->
+<section class="meet">
+  <div class="wrap meet-grid">
+    <div class="ty-photo reveal">
+      <img src="data:image/jpeg;base64,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" alt="Ty Franklin, real estate investor" />
+      <div class="badge">Ty Franklin · Real estate investor &amp; wholesaler</div>
+    </div>
+    <div class="reveal">
+      <span class="sec-eyebrow">Why Ty recommends it</span>
+      <h2>Ty's not a software guy. He's an investor who got tired of overpaying.</h2>
+      <p>Ty used to pay a different company for everything — contracts, lists, skip tracing, follow-up. The bills piled up, and he still lost leads he forgot to chase.</p>
+      <p><strong>REsimpli put all of it in one place</strong> — lists, skip tracing, calls, contracts, follow-up, even AI call summaries. One login, one bill.</p>
+      <p class="ty-quote">"If you're looking to cut unnecessary costs in your business, this is where I'd start."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SAVINGS INTRO + FEATURES 1-3 ===================== -->
+<section id="savings">
+  <div class="wrap">
+    <div class="center" style="max-width:760px;margin:0 auto 50px">
+      <span class="sec-eyebrow">Part 1 — Stop overpaying</span>
+      <h2 class="sec-title center">The first thing REsimpli fixed for Ty: his software bill.</h2>
+      <p class="sec-sub center">Three tools Ty used to pay for separately are just… included. Here's the math.</p>
+    </div>
+
+    <!-- FEATURE 1: E-SIGNATURES -->
+    <div class="feature reveal">
+      <div class="ftext">
+        <span class="ftag">💲 Save money · E-signatures</span>
+        <h3>Send contracts for $1 a document — not $25 a month.</h3>
+        <p class="lede">Contracts, assignments, seller sheets — Ty sends them all through REsimpli.</p>
+        <p>$1 per document. DocuSign's standard plan is ~$25/mo and caps you near 8 docs. Those same 8 cost $8 here — you only pay for what you send.</p>
+        <span class="save-chip">↓ <span class="big">~$17/mo saved</span> vs. a standard DocuSign plan</span>
+      </div>
+      <!-- SCREENSHOT: e-sign / send document UI -->
+      <div class="vcard">
+        <div class="vcard-top"><span class="dot"></span> Send for signature</div>
+        <div class="vcard-body">
+          <div class="summary-row"><span class="k">Document</span><span class="v">Assignment Agreement.pdf</span></div>
+          <div class="summary-row"><span class="k">Send to</span><span class="v">seller@email.com</span></div>
+          <div class="summary-row"><span class="k">Cost</span><span class="v" style="color:var(--teal);font-weight:700">$1.00</span></div>
+          <div style="margin-top:16px"><span class="btn btn-primary btn-sm" style="pointer-events:none">Send for e-signature →</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURE 2: SKIP TRACING -->
+    <div class="feature flip reveal">
+      <div class="ftext">
+        <span class="ftag">💲 Save money · Skip tracing</span>
+        <h3>Free skip tracing built right into the CRM.</h3>
+        <p class="lede">Every deal needs seller numbers. Ty gets his without paying per record.</p>
+        <p>It's included with your plan. At $0.08/record, 10,000 records runs $800/mo elsewhere — and Ty runs way more than that. At his volume, that's ~$1,500/mo he's not handing anyone.</p>
+        <div class="tiers" style="margin-top:22px">
+          <div class="tier"><div class="pname">Basic</div><div class="num">10,000</div><div class="lbl">free records / mo</div></div>
+          <div class="tier mid"><div class="pname">Pro</div><div class="num">20,000</div><div class="lbl">free records / mo</div></div>
+          <div class="tier"><div class="pname">Enterprise</div><div class="num">50,000</div><div class="lbl">free records / mo</div></div>
+        </div>
+        <span class="save-chip">↓ <span class="big">~$1,500/mo saved</span> at Ty's skip-trace volume</span>
+      </div>
+      <!-- SCREENSHOT: skip trace lists view -->
+      <div class="vcard">
+        <div class="vcard-top"><span class="dot"></span> Ty's skip-traced lists</div>
+        <div class="vcard-body">
+          <div class="summary-row"><span class="k">Charlotte SFR</span><span class="v">4,120 records · skip traced ✓</span></div>
+          <div class="summary-row"><span class="k">Probate 2024</span><span class="v">1,715 records · skip traced ✓</span></div>
+          <div class="summary-row"><span class="k">High-equity</span><span class="v">10,240 records · skip traced ✓</span></div>
+          <div class="summary-row"><span class="k">Absentee owners</span><span class="v">2,090 records · skip traced ✓</span></div>
+          <div style="margin-top:14px;font-size:.85rem;color:var(--teal);font-weight:700">Total cost: $0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURE 3: LIST BUILDER -->
+    <div class="feature reveal">
+      <div class="ftext">
+        <span class="ftag">💲 Save money · List Builder</span>
+        <h3>Build your lists in-house — skip the $97/mo list tool.</h3>
+        <p class="lede">Pull property records by the filters that matter — no separate tool.</p>
+        <p>Single-family, 40%+ equity, not owner-occupied? Filter, search, export — then skip trace it free and start calling. PropStream charges ~$97/mo for this. Here it's in the plan.</p>
+        <span class="save-chip">↓ <span class="big">~$97/mo saved</span> vs. a standalone list tool</span>
+      </div>
+      <!-- SCREENSHOT: list builder filters -->
+      <div class="vcard">
+        <div class="vcard-top"><span class="dot"></span> List Builder · Charlotte, NC</div>
+        <div class="vcard-body">
+          <div class="summary-row"><span class="k">Property type</span><span class="v">Single family</span></div>
+          <div class="summary-row"><span class="k">Estimated equity</span><span class="v">40%+</span></div>
+          <div class="summary-row"><span class="k">Owner-occupied</span><span class="v">No</span></div>
+          <div style="margin:14px 0 6px"><span class="btn btn-primary btn-sm" style="pointer-events:none">Search &amp; export →</span></div>
+          <div style="font-size:.85rem;color:var(--muted)">→ Export → Skip trace free → Start calling</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SAVINGS TOTALIZER ===================== -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="totalizer reveal">
+      <p class="lead">Here's Ty's monthly math when you stack it up:</p>
+      <div class="stack">
+        <div class="item"><div class="amt">$17</div><div class="what">e-signatures vs DocuSign</div></div>
+        <div class="item"><div class="amt">$1,500</div><div class="what">skip tracing (Ty's volume)</div></div>
+        <div class="item"><div class="amt">$97</div><div class="what">list tool replaced</div></div>
+      </div>
+      <p class="grand">That's roughly</p>
+      <div class="bignum" id="yearTotal">$19,368/yr</div>
+      <p class="fine">Based on Ty's usage and example pricing. Your numbers depend on plan and volume — but it's one tool instead of four.</p>
+      <a class="btn btn-primary" href="#AFFILIATE_LINK">Start Saving — 14-Day Free Trial <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FEATURES 4-5 (CLOSE MORE) ===================== -->
+<section style="padding-top:20px">
+  <div class="wrap">
+    <div class="center" style="max-width:760px;margin:0 auto 50px">
+      <span class="sec-eyebrow">Part 2 — Close more deals</span>
+      <h2 class="sec-title center">Saving money is nice. Closing more deals is the point.</h2>
+      <p class="sec-sub center">Two features that win Ty deals other investors lose.</p>
+    </div>
+
+    <!-- FEATURE 4: DRIP AUTOMATIONS -->
+    <div class="feature reveal">
+      <div class="ftext">
+        <span class="ftag">📈 Close more · Drip automations</span>
+        <h3>This lead sat in Ty's CRM for 582 days. Then it closed.</h3>
+        <p class="lede">Closing deals is about follow-up. Drips are how Ty never drops one.</p>
+        <p>His drips fire call tasks, texts, emails, even AI — while he works other leads. That 582-day lead never got sold to someone else, because the system followed up when he'd have forgotten.</p>
+        <span class="save-chip" style="background:#eef4ff;color:#2a5bd7;border-color:#d2e0ff">🎁 Ty's own drip templates included</span>
+      </div>
+      <!-- SCREENSHOT: drip timeline -->
+      <div class="vcard">
+        <div class="vcard-top"><span class="dot"></span> Drip · "Long-term seller follow-up"</div>
+        <div class="vcard-body">
+          <div class="timeline">
+            <div class="tl-item"><span class="pip"></span><div class="day">DAY 1</div><div class="act">Manual call task</div><div class="meta">Reminds Ty to call</div></div>
+            <div class="tl-item"><span class="pip"></span><div class="day">DAY 4</div><div class="act">SMS sent automatically</div><div class="meta">"Still thinking about selling?"</div></div>
+            <div class="tl-item"><span class="pip"></span><div class="day">DAY 14</div><div class="act">Email + AI follow-up</div><div class="meta">Keeps the lead warm</div></div>
+            <div class="tl-item"><span class="pip"></span><div class="day">DAY 582</div><div class="act" style="color:var(--teal)">Deal closed ✓</div><div class="meta">Never slipped through</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURE 5: AI CALL SUMMARIES -->
+    <div class="feature flip reveal">
+      <div class="ftext">
+        <span class="ftag">🤖 Close more · AI call summaries</span>
+        <h3>A 28-minute seller call, summarized for Ty automatically.</h3>
+        <p class="lede">A must-have. Ty never re-listens to calls or takes perfect notes anymore.</p>
+        <p>After a 28-minute seller call, Ty got a transcript plus the key points — motivation, condition, price, objections, next steps. If you're on the phones with sellers, you need this.</p>
+        <span class="save-chip" style="background:#fff4e6;color:#b3600a;border-color:#ffe0b8">⏱ Hours of note-taking, gone</span>
+      </div>
+      <!-- SCREENSHOT: AI call summary -->
+      <div class="vcard">
+        <div class="vcard-top"><span class="dot"></span> AI Call Summary · 28:14</div>
+        <div class="vcard-body">
+          <div class="summary-row"><span class="k">Motivation</span><span class="v">Court-ordered sale, ex-husband complications</span></div>
+          <div class="summary-row"><span class="k">Condition</span><span class="v">Small home, needs new roof + AC</span></div>
+          <div class="summary-row"><span class="k">Price</span><span class="v">Expectation captured from call</span></div>
+          <div class="summary-row"><span class="k">Objections</span><span class="v">Logged + how they were handled</span></div>
+          <div class="summary-row"><span class="k">Next steps</span><span class="v">Follow-up + compliance check (45 days)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SOCIAL PROOF ===================== -->
+<section class="proof">
+  <div class="wrap center" style="max-width:760px">
+    <span class="sec-eyebrow">Not just Ty</span>
+    <h2 class="sec-title center">The #1-rated CRM real estate investors actually stick with.</h2>
+  </div>
+  <div class="wrap">
+    <div class="proof-stats">
+      <div class="pstat reveal"><div class="n">4.9★</div><div class="l">Across every platform</div></div>
+      <div class="pstat reveal"><div class="n">2,547+</div><div class="l">Reviews and counting</div></div>
+      <div class="pstat reveal"><div class="n">#1</div><div class="l">Real Estate CRM on G2</div></div>
+      <div class="pstat reveal"><div class="n">1,000s</div><div class="l">Of investors trust it</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PRICING ===================== -->
+<section class="pricing">
+  <div class="wrap">
+    <div class="center" style="margin:0 auto 8px">
+      <span class="sec-eyebrow">Pricing</span>
+      <h2 class="sec-title center">Every plan includes a free trial of Gen 2 AI.</h2>
+      <p class="sec-sub center">Pick the plan that fits your operation. All of them include the features Ty uses.</p>
+    </div>
+
+    <div class="plans">
+      <!-- BASIC -->
+      <div class="plan reveal">
+        <div class="pname">Basic</div>
+        <div class="price">$149<span>/mo</span></div>
+        <div class="billed">billed yearly</div>
+        <div class="who">For solo operators</div>
+        <div class="skip">10,000 free skip traces / mo</div>
+        <a class="btn btn-ghost pbtn-top" href="#AFFILIATE_LINK">Start 14-Day Free Trial</a>
+      </div>
+
+      <!-- PRO -->
+      <div class="plan popular reveal">
+        <span class="pop-badge">Most Popular</span>
+        <div class="pname">Pro</div>
+        <div class="price">$299<span>/mo</span></div>
+        <div class="billed">billed yearly</div>
+        <div class="who">For teams of up to 5</div>
+        <div class="skip">20,000 free skip traces / mo</div>
+        <a class="btn btn-primary pbtn-top" href="#AFFILIATE_LINK">Start 14-Day Free Trial</a>
+      </div>
+
+      <!-- ENTERPRISE -->
+      <div class="plan reveal">
+        <div class="pname">Enterprise</div>
+        <div class="price">$599<span>/mo</span></div>
+        <div class="billed">billed yearly</div>
+        <div class="who">For teams of up to 10</div>
+        <div class="skip">50,000 free skip traces / mo</div>
+        <a class="btn btn-ghost pbtn-top" href="#AFFILIATE_LINK">Start 14-Day Free Trial</a>
+      </div>
+    </div>
+
+    <div class="includes reveal">
+      <h4>Every plan includes</h4>
+      <ul class="inc-grid">
+        <li><span class="tick">✓</span> 14-day free trial</li>
+        <li><span class="tick">✓</span> Skip tracing</li>
+        <li><span class="tick">✓</span> Free cash buyer searches</li>
+        <li><span class="tick">✓</span> Drip campaigns</li>
+        <li><span class="tick">✓</span> Direct mail</li>
+        <li><span class="tick">✓</span> Call, text &amp; email</li>
+        <li><span class="tick">✓</span> List stacking</li>
+        <li><span class="tick">✓</span> Email campaigns</li>
+        <li><span class="tick">✓</span> e-Signature</li>
+        <li><span class="tick">✓</span> List Builder</li>
+        <li><span class="tick">✓</span> Driving for Dollars</li>
+        <li><span class="tick">✓</span> AI &amp; dashboard reports</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FINAL CTA ===================== -->
+<section class="final">
+  <div class="wrap">
+    <span class="sec-eyebrow" style="color:#6fe0c4">Try Ty's exact setup</span>
+    <h2>Cut the software bloat. Stop dropping leads. Close more deals.</h2>
+    <p>One tool instead of four. Money saved every month, leads that don't slip away. Try Ty's setup free for 14 days.</p>
+    <a class="btn btn-primary" href="#AFFILIATE_LINK">Start Your 14-Day Free Trial <span class="arrow">→</span></a>
+    <p class="bonus">Follow Ty? <b>Comment "CRM"</b> on his videos and he'll send the trial link + his drip templates.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span>REsimpli — One app to replace them all.</span>
+    <span>Recommended by Ty Franklin · Real estate investor</span>
+  </div>
+</footer>
+
+<!-- sticky mobile CTA -->
+<div class="mobile-bar">
+  <a class="btn btn-primary" href="#AFFILIATE_LINK">Start Your 14-Day Free Trial →</a>
+</div>
+
+<script>
+  // Scroll reveals
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Count-up on the yearly total when it scrolls into view
+  const totalEl = document.getElementById('yearTotal');
+  const target = 19368;
+  let counted = false;
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const counter = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting && !counted){
+        counted = true;
+        if(prefersReduced){ totalEl.textContent = '$19,368/yr'; counter.disconnect(); return; }
+        let cur = 0;
+        const steps = 60;
+        const inc = target/steps;
+        const tick = ()=>{
+          cur += inc;
+          if(cur >= target){ totalEl.textContent = '$19,368/yr'; return; }
+          totalEl.textContent = '$' + Math.round(cur).toLocaleString() + '/yr';
+          requestAnimationFrame(tick);
+        };
+        tick();
+        counter.disconnect();
+      }
+    });
+  },{threshold:.5});
+  counter.observe(totalEl);
+</script>
