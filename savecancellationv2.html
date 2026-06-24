@@ -175,6 +175,7 @@ svg{width:1em;height:1em;display:block}
 .modal__iconbtn svg{width:18px;height:18px;}
 .field{display:flex;flex-direction:column;gap:8px;margin:4px 0 20px;}
 .field label{font-size:13px;font-weight:800;color:var(--ink);}
+.field label .req{color:var(--red);font-weight:800;}
 .field input{width:100%;border:1.6px solid var(--line);border-radius:12px;padding:14px 15px;font:inherit;font-size:14.5px;color:var(--ink);outline:none;}
 .field input:focus{border-color:var(--teal);box-shadow:0 0 0 4px var(--teal-tint);}
 .calendar-embed{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;box-shadow:var(--shadow-sm);margin:6px 0 18px;}
@@ -459,6 +460,14 @@ const REASON_OFFERS = {
     first:{
       primary:{ic:'pause', title:'Pause your plan instead — $49/mo', desc:'Keep your numbers active and data safe while your business is on hold. Resume anytime.', outcome:'pause'}
     }
+  },
+  'A2P 10DLC concerns':{
+    first:{
+      primary:{ic:'phone', title:'Book an onboarding call to resolve A2P 10DLC', desc:'Get 1-on-1 help registering your brand and campaign so your messages deliver.', outcome:'accountManager'}
+    },
+    second:{
+      primary:{ic:'pause', title:'Pause your plan — $49/mo', desc:'Keep your numbers active and data safe while you get A2P resolved. Resume anytime.', outcome:'pause'}
+    }
   }
 };
 
@@ -585,15 +594,16 @@ function render(){
   }
 
   else if(state.step==='switchingProduct'){
+    const hasProduct = state.switchingProduct.trim().length > 0;
     html = `
       ${steps('mid')}
       <h2 class="m-title" id="mTitle">What product are you switching to?</h2>
       <p class="m-sub">This helps us understand where we fell short.</p>
       <div class="field">
-        <label for="switchingProductInput">Product name</label>
-        <input id="switchingProductInput" type="text" autocomplete="off" placeholder="e.g. Product name" value="${state.switchingProduct.replace(/"/g,'&quot;')}" />
+        <label for="switchingProductInput">Product name <span class="req">*</span></label>
+        <input id="switchingProductInput" type="text" autocomplete="off" placeholder="e.g. Product name" value="${state.switchingProduct.replace(/"/g,'&quot;')}" required />
       </div>
-      <button class="btn btn--primary btn--full" data-action="saveSwitchingProduct">Continue</button>`;
+      <button class="btn btn--primary btn--full" data-action="saveSwitchingProduct" ${hasProduct?'':'disabled'} style="${hasProduct?'':'opacity:.5;cursor:not-allowed;box-shadow:none'}">Continue</button>`;
   }
 
   else if(state.step==='calendar'){
@@ -608,14 +618,11 @@ function render(){
   }
 
   else if(state.step==='confirm'){
-    const productCopy = state.reason === 'Switching to another product' && state.switchingProduct.trim()
-      ? `<br><strong>Switching to:</strong> ${state.switchingProduct.trim()}`
-      : '';
     html = `
       ${steps('confirm')}
       <div class="glyph glyph--x">${icon('x')}</div>
       <h2 class="m-title" id="mTitle">Confirm cancellation</h2>
-      <p class="m-sub">Access continues until the end of your current billing period · numbers released after access ends · data deleted 30 days later${productCopy}</p>
+      <p class="m-sub">Access continues until the end of your current billing period · numbers released after access ends · data deleted 30 days later</p>
       <div class="m-actions">
         <button class="btn btn--primary" data-action="keep">Keep subscription</button>
         <button class="btn btn--danger-ghost" data-action="submitCancel">Submit &amp; cancel</button>
@@ -670,12 +677,13 @@ modal.addEventListener('click', (e)=>{
       else goStep('offer2');
       break;
     case 'decline2':
-      if(shouldAskSwitchingProduct()) goStep('switchingProduct');
-      else goStep('confirm');
+      goStep('confirm');
       break;
     case 'saveSwitchingProduct':
       const input = document.getElementById('switchingProductInput');
-      state.switchingProduct = input ? input.value.trim() : state.switchingProduct;
+      const val = input ? input.value.trim() : state.switchingProduct.trim();
+      if(!val) break;
+      state.switchingProduct = val;
       goStep('offer1');
       break;
     case 'accept':      acceptOffer(el.dataset.outcome); break;
@@ -691,13 +699,23 @@ modal.addEventListener('click', (e)=>{
 modal.addEventListener('input', (e)=>{
   if(e.target && e.target.id === 'switchingProductInput'){
     state.switchingProduct = e.target.value;
+    const btn = modal.querySelector('[data-action="saveSwitchingProduct"]');
+    if(btn){
+      const has = e.target.value.trim().length > 0;
+      btn.disabled = !has;
+      btn.style.opacity = has ? '' : '.5';
+      btn.style.cursor = has ? '' : 'not-allowed';
+      btn.style.boxShadow = has ? '' : 'none';
+    }
   }
 });
 
 modal.addEventListener('keydown', (e)=>{
   if(e.key === 'Enter' && e.target && e.target.id === 'switchingProductInput'){
     e.preventDefault();
-    state.switchingProduct = e.target.value.trim();
+    const val = e.target.value.trim();
+    if(!val) return;
+    state.switchingProduct = val;
     goStep('offer1');
   }
 });
