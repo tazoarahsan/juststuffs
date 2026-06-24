@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -587,7 +586,7 @@ function render(){
 
   else if(state.step==='switchingProduct'){
     html = `
-      ${steps('confirm')}
+      ${steps('mid')}
       <h2 class="m-title" id="mTitle">What product are you switching to?</h2>
       <p class="m-sub">This helps us understand where we fell short.</p>
       <div class="field">
@@ -661,7 +660,10 @@ modal.addEventListener('click', (e)=>{
     case 'goReason':    goStep('reason'); break;
     case 'pickReason':  state.reason = el.dataset.id; render(); break;
     case 'goOffer1':
-      if(state.reason) goStep('offer1');
+      if(state.reason){
+        if(shouldAskSwitchingProduct()) goStep('switchingProduct');
+        else goStep('offer1');
+      }
       break;
     case 'decline1':
       if(state.reason==='Shutting down my business') goStep('confirm');
@@ -674,7 +676,7 @@ modal.addEventListener('click', (e)=>{
     case 'saveSwitchingProduct':
       const input = document.getElementById('switchingProductInput');
       state.switchingProduct = input ? input.value.trim() : state.switchingProduct;
-      goStep('confirm');
+      goStep('offer1');
       break;
     case 'accept':      acceptOffer(el.dataset.outcome); break;
     case 'calendarBooked':
@@ -696,7 +698,7 @@ modal.addEventListener('keydown', (e)=>{
   if(e.key === 'Enter' && e.target && e.target.id === 'switchingProductInput'){
     e.preventDefault();
     state.switchingProduct = e.target.value.trim();
-    goStep('confirm');
+    goStep('offer1');
   }
 });
 
