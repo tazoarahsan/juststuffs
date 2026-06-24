@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,19 +52,24 @@
   .close:hover{background:rgba(255,255,255,.28)}
 
   /* ---- header / reward ---- */
-  .head{background:linear-gradient(135deg,var(--teal) 0%,var(--teal-d) 100%);color:#fff;
-    padding:26px 30px 22px;position:relative;overflow:hidden}
-  .head::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;
+  .hero{background:linear-gradient(135deg,var(--teal) 0%,var(--teal-d) 100%);color:#fff;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;z-index:0;
     background:radial-gradient(circle,rgba(255,255,255,.14),transparent 70%)}
+  .head{color:#fff;padding:26px 24px 18px;position:relative;z-index:1}
   .kicker{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:#bfe6e8;font-weight:700;margin:0 0 8px}
-  .head h1{font-family:var(--display);font-weight:800;font-size:25px;line-height:1.15;letter-spacing:-.5px;margin:0;max-width:380px}
-  .reward{display:inline-flex;align-items:center;gap:9px;margin-top:14px;background:rgba(255,255,255,.13);
+  .head h1{font-family:var(--display);font-weight:800;font-size:26px;line-height:1.15;letter-spacing:-.65px;margin:0;white-space:nowrap}
+  .subhead{margin:11px 0 0;font-size:14px;line-height:1.5;color:#d7eff0;max-width:430px}
+  .reward{display:inline-flex;align-items:center;gap:6px;margin-top:14px;background:rgba(255,255,255,.13);
     border:1px solid rgba(255,255,255,.22);padding:7px 14px 7px 9px;border-radius:30px;font-weight:700;font-size:13.5px}
   .coin{width:26px;height:26px;border-radius:50%;background:linear-gradient(145deg,#f2d479,#caa23a);
     color:#5a4406;font-family:var(--display);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;
     box-shadow:inset 0 -2px 3px rgba(90,68,6,.3)}
 
   /* ---- progress ---- */
+  .intro{padding:4px 24px 30px;position:relative;z-index:1}
+  .intro .btn-primary{width:100%;padding:15px 20px;font-size:15px;background:#fff;color:var(--teal-d)}
+  .intro .btn-primary:hover{background:#f0fbfb;transform:translateY(-1px);box-shadow:0 10px 22px -10px rgba(0,0,0,.4)}
+  .introhint{margin:13px 0 0;text-align:center;font-size:12px;color:rgba(255,255,255,.72);font-weight:600;letter-spacing:.3px}
   .progress{display:flex;gap:6px;padding:16px 30px 0}
   .progress .seg{flex:1;height:5px;border-radius:3px;background:var(--line);overflow:hidden}
   .progress .seg i{display:block;height:100%;width:0;background:var(--teal);transition:width .4s ease}
@@ -159,8 +165,8 @@
 
   @media (max-width:560px){
     .grid{grid-template-columns:1fr}
-    .head h1{font-size:22px}
-    .body,.head,.foot,.progress,.steplabel{padding-left:20px;padding-right:20px}
+    .head h1{font-size:20px;white-space:normal}
+    .body,.head,.intro,.foot,.progress,.steplabel{padding-left:20px;padding-right:20px}
   }
 </style>
 </head>
@@ -183,11 +189,21 @@
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ttl">
       <button class="close" id="closeBtn" aria-label="Close">&times;</button>
 
-      <!-- HEADER + REWARD -->
-      <div class="head">
-        <p class="kicker">Deal of the Week</p>
-        <h1 id="ttl">Share a deal you closed — get&nbsp;$100&nbsp;credit</h1>
-        <span class="reward"><span class="coin">$</span> $100 account credit when you submit</span>
+      <!-- HERO (teal first screen + compact header on form) -->
+      <div class="hero" id="hero">
+        <!-- HEADER + REWARD -->
+        <div class="head">
+          <p class="kicker">Deal of the Week</p>
+          <h1 id="ttl">We want to feature a deal you closed</h1>
+          <p class="subhead" id="subhead">Share a closed deal that had unexpected challenges or a unique outcome. If it gets selected, it will be featured on our Deal of the Week email.</p>
+          <span class="reward" id="reward"><span class="coin">$</span>100 credit if your deal gets selected</span>
+        </div>
+
+        <!-- INTRO CTA (first screen) -->
+        <div class="intro" id="intro">
+          <button class="btn btn-primary" id="startBtn">Continue</button>
+          <p class="introhint">Takes about 3 minutes</p>
+        </div>
       </div>
 
       <!-- PROGRESS -->
@@ -380,15 +396,15 @@
 
       <!-- SUCCESS -->
       <div class="success" id="success">
-        <div class="badge">$100</div>
-        <h2>Your deal is in 🎉</h2>
-        <p>Thanks for sharing — this is exactly the kind of deal other investors learn the most from.</p>
+        <div class="badge">✓</div>
+        <h2>Got it — your deal's in 🎉</h2>
+        <p>Thanks for sharing. Each week we pick one deal to feature — exactly the kind of story other investors learn the most from.</p>
         <div class="creditbox">
           <span class="amt">$100</span>
-          <span class="txt">account credit<br>on its way</span>
+          <span class="txt">account credit<br>if your deal is featured</span>
         </div>
         <p class="finep">
-          <span class="check"></span> Credit is applied to your next invoice within 5 business days after we verify the deal against the lead record you shared. If we feature your deal, we'll reach out first.
+          <span class="check"></span> We review every submission and verify it against the lead record you shared. If we feature your deal, we'll reach out first, and the $100 credit lands on your next invoice.
         </p>
         <button class="btn btn-primary" id="doneBtn" style="margin-top:22px">Done</button>
       </div>
@@ -406,6 +422,31 @@
   var backBtn=document.getElementById('backBtn');
   var stepLabel=document.getElementById('stepLabel');
   var footHint=document.getElementById('footHint');
+  var intro=document.getElementById('intro');
+  var startBtn=document.getElementById('startBtn');
+  var prog=document.getElementById('prog');
+  var foot=document.getElementById('foot');
+  var formBody=document.getElementById('formBody');
+  var subhead=document.getElementById('subhead');
+  var reward=document.getElementById('reward');
+
+  function showIntro(){
+    intro.style.display='block';
+    prog.style.display='none';
+    stepLabel.style.display='none';
+    formBody.style.display='none';
+    foot.style.display='none';
+  }
+  function startForm(){
+    intro.style.display='none';
+    if(subhead) subhead.style.display='none';
+    if(reward) reward.style.display='none';
+    prog.style.display='';
+    stepLabel.style.display='';
+    formBody.style.display='';
+    foot.style.display='';
+    step=1; render();
+  }
 
   function render(){
     steps.forEach(function(s){ s.classList.toggle('show', +s.dataset.step===step); });
@@ -415,8 +456,8 @@
     });
     stepLabel.textContent='Step '+step+' of '+total+' · '+labels[step];
     backBtn.style.display = step>1 ? 'inline-block':'none';
-    nextBtn.textContent = step===total ? 'Submit & claim $100' : 'Continue';
-    footHint.textContent = step===total ? 'You\u2019ll get $100 credit after we verify your deal' : 'Takes about 3 minutes';
+    nextBtn.textContent = step===total ? 'Submit my deal' : 'Continue';
+    footHint.textContent = step===total ? '$100 in credit if your deal gets featured' : 'Takes about 3 minutes';
     document.getElementById('formBody').scrollTop=0;
   }
 
@@ -501,7 +542,7 @@
     document.getElementById('formBody').style.display='none';
     document.getElementById('prog').style.display='none';
     stepLabel.style.display='none';
-    document.querySelector('.head').style.display='none';
+    document.getElementById('hero').style.display='none';
     document.getElementById('success').classList.add('show');
   }
 
@@ -511,7 +552,9 @@
   document.getElementById('doneBtn').addEventListener('click',close);
   document.getElementById('overlay').addEventListener('click',function(e){ if(e.target===this)close(); });
 
-  render();
+  startBtn.addEventListener('click',startForm);
+
+  showIntro();
 })();
 </script>
 </body>
