@@ -565,26 +565,168 @@ function openEmail(id){
   renderList();
 }
 
-function buildEmailDoc(id){
-  const e = EMAILS.find(x=>x.id===id);
-  if(!e) return "";
-  let bodyHtml = document.getElementById("body-"+id).innerHTML
-    .replace(/@@IMG:([^@]+)@@/g,(m,n)=> IMAGES[n] ? '<img class="shot" src="'+IMAGES[n]+'" alt="">' : "");
-  let header = "";
-  if(e.header === "logo") header = '<div class="mail-logo"><img src="' + LOGO + '" alt="REsimpli"></div>';
-  else if(e.header === "banner") header = '<div class="mail-banner"><img src="' + BANNER + '" alt="The New REsimpli — Live · September 8, 2026"></div>';
-  const footer = '<div class="mail-footer"><p>You\'re receiving this because you have a REsimpli account.</p>'
-    + '<p><a href="{{email.unsubscribe_link}}">Unsubscribe</a> &middot; REsimpli &middot; 8410 Kennedy Avenue, Highland, IN 46322</p></div>';
-  const card = (e.header === "none")
-    ? '<div class="mail-canvas sms-canvas">' + bodyHtml + '</div>'
-    : '<div class="mail-canvas"><div class="mail-card">' + header + bodyHtml + footer + '</div></div>';
-  const css = document.querySelector("style").textContent;
-  return '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
-    + '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
-    + '<title>' + escapeHtml(e.subject) + '</title>\n<style>\n' + css + '\n</style>\n</head>\n<body>\n'
-    + card + '\n</body>\n</html>\n';
-}
+/* ===== GHL-ready email export config ===== */
+var HERO_LINK = "https://resimpli.com/thenewresimpli/";
+/* Hosted image URLs used in the EXPORTED (Copy HTML) email code — GHL/Gmail safe.
+   Banner is set. Paste your CDN links for the logo and each screenshot below. */
+var HOSTED = {
+  banner: "https://assets.cdn.filesafe.space/9wcAS15uBjwsqQtW2zpi/media/6a79e0d322e1e17a2bf61457.png",
+  logo: "REPLACE_WITH_HOSTED_LOGO_URL",
+  "shot/add_pipeline": "REPLACE_HOSTED_URL_add_pipeline",
+  "shot/pipeline_board": "REPLACE_HOSTED_URL_pipeline_board",
+  "shot/automation_list": "REPLACE_HOSTED_URL_automation_list",
+  "shot/automation_builder": "REPLACE_HOSTED_URL_automation_builder",
+  "shot/triple_dialer": "REPLACE_HOSTED_URL_triple_dialer",
+  "shot/dashboards": "REPLACE_HOSTED_URL_dashboards",
+  "shot/api_token": "REPLACE_HOSTED_URL_api_token",
+  "shot/driving_dollars": "REPLACE_HOSTED_URL_driving_dollars",
+  "shot/campaigns": "REPLACE_HOSTED_URL_campaigns",
+  "shot/bulk_import": "REPLACE_HOSTED_URL_bulk_import"
+};
+var FF = "font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;";
+var FONT = FF + "font-size:16px;line-height:25px;color:#3c4a4a;";
+var PM = "margin:0 0 16px 0;";
 
+function applyMerge(s){
+  return s.replace(/\[FIRST NAME\]|\{FIRST NAME\}|\{FIRST_NAME\}|\{\{contact\.first_name\}\}/g, '{{default contact.first_name "there"}}');
+}
+function hostedUrl(key){ return HOSTED[key] || ("REPLACE_WITH_HOSTED_URL::" + key); }
+function imgTag(key, alt){
+  return '<img src="' + hostedUrl(key) + '" alt="' + escapeHtml(alt || "") + '" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0;margin:0;padding:0;">';
+}
+function renderInline(node){
+  var out = "";
+  Array.prototype.forEach.call(node.childNodes, function(n){
+    if(n.nodeType === 3){ out += escapeHtml(n.nodeValue); return; }
+    if(n.nodeType !== 1) return;
+    var t = n.tagName.toLowerCase();
+    var cls = n.getAttribute("class") || "";
+    if(t === "b" || t === "strong") out += '<strong style="color:#13231f;">' + renderInline(n) + '</strong>';
+    else if(t === "br") out += "<br>";
+    else if(t === "i" || t === "em") out += "<em>" + renderInline(n) + "</em>";
+    else if(t === "a"){ var href = n.getAttribute("href") || "#"; out += '<a href="' + href + '" target="_blank" style="color:#008088;text-decoration:underline;">' + renderInline(n) + '</a>'; }
+    else if(t === "span"){ out += (cls.indexOf("who") >= 0) ? '<strong style="color:#13231f;">' + renderInline(n) + '</strong>' : renderInline(n); }
+    else out += renderInline(n);
+  });
+  return out;
+}
+function headerRow(e){
+  if(e.header === "banner"){
+    return '<tr><td style="padding:0;margin:0;font-size:0;line-height:0;"><a href="' + HERO_LINK + '" target="_blank" style="display:block;margin:0;padding:0;text-decoration:none;"><img src="' + HOSTED.banner + '" alt="The New REsimpli — Live · September 8, 2026" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0;margin:0;padding:0;"></a></td></tr>';
+  }
+  if(e.header === "logo"){
+    return '<tr><td align="center" style="padding:30px 40px 6px 40px;"><img src="' + HOSTED.logo + '" alt="REsimpli" height="34" style="height:34px;width:auto;display:inline-block;border:0;margin:0;"></td></tr>';
+  }
+  return "";
+}
+function footerRow(){
+  return '<tr><td align="center" style="padding:26px 40px 34px 40px;background:#ffffff;' + FF + 'text-align:center;"><p style="margin:0;font-size:12px;line-height:18px;color:#9aa7a7;text-align:center;"><a href="{{email.unsubscribe_link}}" style="color:#9aa7a7;text-decoration:underline;mso-style-textfill-fill-color:#9aa7a7;"><!--[if mso]><font color="#9aa7a7"><![endif]-->Unsubscribe<!--[if mso]></font><![endif]--></a>&nbsp;&middot;&nbsp;{{location.full_address}}</p></td></tr>';
+}
+function buttonRow(a){
+  var href = a.getAttribute("href") || "#"; if(href === "#") href = HERO_LINK;
+  var label = a.textContent.trim();
+  var w = Math.min(520, Math.max(200, Math.round(label.length * 9.5) + 48));
+  return '<tr><td align="center" style="padding:6px 40px 26px 40px;">'
+    + '<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="' + href + '" style="height:50px;v-text-anchor:middle;width:' + w + 'px;" arcsize="16%" stroke="f" fillcolor="#008088"><w:anchorlock/><center style="color:#ffffff;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">' + escapeHtml(label) + '</center></v:roundrect><![endif]-->'
+    + '<!--[if !mso]><!--><a href="' + href + '" target="_blank" style="display:inline-block;background:#008088;color:#ffffff;' + FF + 'font-size:16px;font-weight:700;line-height:20px;padding:15px 34px;border-radius:8px;text-decoration:none;">' + escapeHtml(label) + '</a><!--<![endif]-->'
+    + '</td></tr>';
+}
+function signRow(div){
+  var inner = "";
+  Array.prototype.forEach.call(div.childNodes, function(n){
+    if(n.nodeType === 3){ inner += escapeHtml(n.nodeValue); return; }
+    if(n.nodeType !== 1) return;
+    var t = n.tagName.toLowerCase();
+    if(t === "br") inner += "<br>";
+    else if(t === "span" && (n.getAttribute("class") || "").indexOf("who") >= 0) inner += '<strong style="color:#13231f;">' + renderInline(n) + '</strong>';
+    else inner += renderInline(n);
+  });
+  return '<tr><td style="' + FONT + 'padding:14px 40px 34px 40px;"><p style="margin:0;color:#3c4a4a;">' + inner + '</p></td></tr>';
+}
+function bandRow(div){
+  var bg = div.classList.contains("tint") ? "#e9f4f2" : "#ffffff";
+  var heading = "", desc = "", shot = null;
+  Array.prototype.forEach.call(div.childNodes, function(n){
+    if(n.nodeType !== 1) return;
+    var t = n.tagName.toLowerCase();
+    if(t === "img") shot = n.getAttribute("data-shot");
+    else if(t === "p"){ if(!heading) heading = renderInline(n); else desc = renderInline(n); }
+  });
+  var out = '<tr><td bgcolor="' + bg + '" style="padding:0;background:' + bg + ';"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">';
+  out += '<tr><td style="' + FONT + 'padding:26px 40px 6px 40px;"><p style="margin:0 0 4px 0;color:#13231f;font-size:17px;font-weight:700;">' + heading + '</p></td></tr>';
+  if(shot) out += '<tr><td style="padding:0;font-size:0;line-height:0;">' + imgTag(shot, "") + '</td></tr>';
+  out += '<tr><td style="' + FONT + 'padding:16px 40px 26px 40px;"><p style="margin:0;">' + desc + '</p></td></tr>';
+  out += '</table></td></tr>';
+  return out;
+}
+function cmpRows(table){
+  var rows = Array.prototype.slice.call(table.querySelectorAll("tr"));
+  var out = '<tr><td style="padding:6px 40px 18px 40px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;' + FF + 'font-size:14px;line-height:20px;">';
+  rows.forEach(function(r, ri){
+    var cells = Array.prototype.slice.call(r.children);
+    var isHead = cells[0] && cells[0].tagName.toLowerCase() === "th";
+    var isLast = ri === rows.length - 1;
+    out += "<tr>";
+    cells.forEach(function(c){
+      if(isHead) out += '<th style="background:#0e3d3c;color:#ffffff;text-align:left;padding:11px 14px;font-size:12px;letter-spacing:.4px;text-transform:uppercase;font-weight:700;">' + escapeHtml(c.textContent.trim()) + '</th>';
+      else if(isLast) out += '<td style="background:#eef6f5;color:#13231f;font-weight:700;padding:12px 14px;border-top:1px solid #d5e5e3;">' + renderInline(c) + '</td>';
+      else out += '<td style="padding:10px 14px;border-bottom:1px solid #e6eeed;color:#3c4a4a;vertical-align:top;">' + renderInline(c) + '</td>';
+    });
+    out += "</tr>";
+  });
+  out += '</table></td></tr>';
+  return out;
+}
+function buildEmailDoc(id){
+  var e = EMAILS.find(function(x){ return x.id === id; });
+  if(!e) return "";
+  var src = document.getElementById("body-" + id);
+  if(e.header === "none"){
+    var bubble = src.querySelector(".sms-bubble");
+    return applyMerge((bubble ? bubble.textContent : src.textContent).trim());
+  }
+  var holder = document.createElement("div");
+  holder.innerHTML = src.querySelector(".email-body").innerHTML.replace(/@@IMG:([^@]+)@@/g, function(m, k){ return '<img data-shot="' + k + '">'; });
+  var rows = "", flow = "", first = true, prevVisual = false;
+  function flush(){
+    if(!flow) return;
+    var top = first ? 32 : (prevVisual ? 22 : 4);
+    rows += '<tr><td style="' + FONT + 'padding:' + top + 'px 40px 6px 40px;">' + flow + '</td></tr>';
+    flow = ""; first = false; prevVisual = false;
+  }
+  Array.prototype.forEach.call(holder.childNodes, function(n){
+    if(n.nodeType !== 1) return;
+    var t = n.tagName.toLowerCase();
+    var cls = n.getAttribute("class") || "";
+    if(t === "p"){
+      if(cls.indexOf("greet") >= 0) flow += '<p style="' + PM + 'color:#13231f;">' + renderInline(n) + '</p>';
+      else if(cls.indexOf("cal") >= 0) flow += '<p style="margin:0 0 16px 0;color:#13231f;font-weight:700;">' + renderInline(n) + '</p>';
+      else flow += '<p style="' + PM + '">' + renderInline(n) + '</p>';
+    } else if(t === "ul"){
+      var items = "";
+      Array.prototype.forEach.call(n.querySelectorAll("li"), function(li){ items += '<li style="margin:0 0 8px 0;">' + renderInline(li) + '</li>'; });
+      flow += '<ul style="margin:0 0 16px 0;padding-left:22px;">' + items + '</ul>';
+    } else if(t === "a" && cls.indexOf("btn") >= 0){
+      flush(); rows += buttonRow(n);
+    } else if(t === "img"){
+      flush(); rows += '<tr><td style="padding:0;font-size:0;line-height:0;">' + imgTag(n.getAttribute("data-shot"), "") + '</td></tr>'; prevVisual = true; first = false;
+    } else if(t === "div" && cls.indexOf("feat") >= 0){
+      flush(); rows += bandRow(n); prevVisual = true; first = false;
+    } else if(t === "div" && cls.indexOf("cmp-wrap") >= 0){
+      flush(); var tb = n.querySelector("table.cmp"); if(tb) rows += cmpRows(tb); prevVisual = true; first = false;
+    } else if(t === "table" && n.classList.contains("cmp")){
+      flush(); rows += cmpRows(n); prevVisual = true; first = false;
+    } else if(t === "div" && cls.indexOf("sign") >= 0){
+      flush(); rows += signRow(n);
+    } else {
+      flow += '<p style="' + PM + '">' + renderInline(n) + '</p>';
+    }
+  });
+  flush();
+  var card = '<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background:#ffffff;border-radius:14px;overflow:hidden;">' + headerRow(e) + rows + footerRow() + '</table>';
+  var outer = '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0;padding:0;background:#eef1f1;"><tr><td align="center" style="padding:24px 12px;">' + card + '</td></tr></table>';
+  return applyMerge(outer);
+}
 function copyText(text){
   if(navigator.clipboard && window.isSecureContext){
     return navigator.clipboard.writeText(text);
