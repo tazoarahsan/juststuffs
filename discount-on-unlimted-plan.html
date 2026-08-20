@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REsimpli · Upgrade to Unlimited</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     REsimpli — Unlimited Plan Upgrade Popup
+     25% off · 7-day countdown
+     ------------------------------------------------------------
+     Deploy: this file is the MODAL. In production, overlay the
+     .re-overlay element on top of your live dashboard and delete
+     the ".demo-dashboard" block below (it exists only so this
+     preview has something realistic behind the blur).
+     Edit prices, offer end date, and promo code in the CONFIG
+     block at the very bottom of the <script>.
+     ============================================================ */
+
+  :root{
+    --teal:#008088;
+    --teal-bright:#4fc3cc;      /* heading / accents, matches screenshot */
+    --teal-soft:#a8dde0;        /* light badge */
+    --coral:#CF4E52;            /* urgency: timer + discount only */
+    --coral-deep:#b23f43;
+    --card-top:#0e2529;
+    --card-bot:#081619;
+    --ink:#ffffff;
+    --muted:#93a4a7;
+    --muted-dim:#6d7d80;
+    --line:rgba(255,255,255,.10);
+    --hi-bg:rgba(0,128,136,.14);
+    --hi-line:rgba(79,195,204,.32);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    background:#eef2f3;
+    overflow:hidden;
+  }
+  h1,h2,h3,.display{font-family:'Gilroy','Poppins',sans-serif;}
+
+  /* ---------- PREVIEW-ONLY faux dashboard (delete in prod) ---------- */
+  .demo-dashboard{position:fixed;inset:0;background:#f4f7f8;padding:22px;overflow:hidden}
+  .dd-top{height:56px;background:#fff;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.06);
+    display:flex;align-items:center;gap:14px;padding:0 20px;margin-bottom:20px}
+  .dd-logo{font-weight:800;color:var(--teal);font-size:20px;letter-spacing:-.5px}
+  .dd-pill{height:12px;border-radius:6px;background:#e6ecee}
+  .dd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:18px}
+  .dd-kpi{height:104px;background:#fff;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:18px}
+  .dd-kpi .dd-pill{width:60%;margin-bottom:14px}
+  .dd-kpi .dd-num{height:26px;width:45%;border-radius:6px;background:#dbe6e7}
+  .dd-wide{height:280px;background:#fff;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  /* ---------------------------------------------------------------- */
+
+  /* ---------- Overlay + modal ---------- */
+  .re-overlay{
+    position:fixed;inset:0;z-index:9999;
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;
+    background:rgba(6,18,20,.55);
+    backdrop-filter:blur(2px);
+    -webkit-backdrop-filter:blur(2px);
+    animation:reFade .35s ease both;
+  }
+  .re-overlay.re-hidden{display:none}
+  @keyframes reFade{from{opacity:0}to{opacity:1}}
+
+  .re-modal{
+    position:relative;
+    width:100%;max-width:440px;
+    max-height:calc(100dvh - 40px);
+    overflow-y:auto;
+    background:linear-gradient(178deg,var(--card-top),var(--card-bot));
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:26px;
+    padding:26px 28px 22px;
+    box-shadow:0 40px 90px rgba(0,0,0,.55),0 0 0 1px rgba(0,128,136,.10);
+    color:var(--ink);
+    animation:rePop .45s cubic-bezier(.2,.9,.25,1.1) both;
+    scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.18) transparent;
+  }
+  .re-modal::-webkit-scrollbar{width:6px}
+  .re-modal::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:3px}
+  @keyframes rePop{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+
+  .re-close{
+    position:absolute;top:16px;right:16px;width:32px;height:32px;
+    border:none;border-radius:50%;cursor:pointer;
+    background:rgba(255,255,255,.06);color:var(--muted);
+    font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;
+    transition:.18s;
+  }
+  .re-close:hover{background:rgba(255,255,255,.14);color:#fff}
+  .re-close:focus-visible{outline:2px solid var(--teal-bright);outline-offset:2px}
+
+  /* ---------- Badge ---------- */
+  .re-badge{
+    display:inline-flex;align-items:center;gap:7px;
+    background:linear-gradient(90deg,var(--coral),var(--coral-deep));
+    color:#fff;font-weight:700;font-size:11.5px;letter-spacing:.10em;
+    padding:7px 14px;border-radius:100px;text-transform:uppercase;
+    box-shadow:0 6px 18px rgba(207,78,82,.35);
+  }
+  .re-badge .dot{width:6px;height:6px;border-radius:50%;background:#fff;animation:rePulse 1.6s ease-in-out infinite}
+  @keyframes rePulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  /* ---------- Heading ---------- */
+  .re-head{margin:14px 0 4px}
+  .re-head h1{font-size:29px;line-height:1.12;font-weight:800;letter-spacing:-.6px}
+  .re-head h1 .em{color:var(--teal-bright)}
+  .re-sub{color:var(--muted);font-size:13.5px;line-height:1.5;margin-top:8px}
+
+  /* ---------- Countdown ---------- */
+  .re-timer-wrap{margin:16px 0 14px}
+  .re-timer-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--coral);
+    font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .re-timer-label::before{content:"";width:14px;height:14px;border-radius:50%;
+    border:2px solid var(--coral);border-top-color:transparent;display:inline-block;animation:reSpin 3s linear infinite}
+  @keyframes reSpin{to{transform:rotate(360deg)}}
+  .re-timer{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .re-unit{background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:12px;
+    padding:10px 4px 8px;text-align:center}
+  .re-unit .num{font-family:'Gilroy','Poppins',sans-serif;font-size:28px;font-weight:800;
+    line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+  .re-unit .lab{font-size:9.5px;letter-spacing:.10em;text-transform:uppercase;color:var(--muted-dim);margin-top:6px}
+
+  /* ---------- Toggle ---------- */
+  .re-toggle{display:flex;background:rgba(255,255,255,.05);border:1px solid var(--line);
+    border-radius:100px;padding:4px;margin-bottom:14px}
+  .re-toggle button{flex:1;border:none;background:transparent;cursor:pointer;color:var(--muted);
+    font-family:inherit;font-weight:600;font-size:13px;padding:9px 6px;border-radius:100px;transition:.2s;position:relative}
+  .re-toggle button.active{background:var(--teal);color:#fff;box-shadow:0 4px 12px rgba(0,128,136,.4)}
+  .re-toggle button .save{font-size:10px;font-weight:600;opacity:.85;margin-left:5px}
+  .re-toggle button:focus-visible{outline:2px solid var(--teal-bright);outline-offset:2px}
+
+  /* ---------- Price ---------- */
+  .re-price{display:flex;align-items:flex-end;gap:12px;margin-bottom:4px}
+  .re-price .now{font-family:'Gilroy','Poppins',sans-serif;font-size:52px;font-weight:800;
+    line-height:.9;letter-spacing:-1.5px}
+  .re-price .per{color:var(--muted);font-size:15px;font-weight:500;padding-bottom:7px}
+  .re-was{display:flex;align-items:center;gap:10px;margin-bottom:12px;min-height:24px}
+  .re-was .old{position:relative;color:var(--muted-dim);font-size:15px;font-weight:500}
+  .re-was .old::after{content:"";position:absolute;left:-2px;right:-2px;top:52%;height:2px;
+    background:var(--coral);transform:scaleX(0);transform-origin:left;transition:transform .5s .25s ease}
+  .re-was .old.struck::after{transform:scaleX(1)}
+  .re-chip{background:var(--hi-bg);border:1px solid var(--hi-line);color:var(--teal-bright);
+    font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:100px}
+
+  /* ---------- Features ---------- */
+  .re-feats-head{font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--teal-bright);font-weight:600;margin:14px 0 4px;padding-top:12px;
+    border-top:1px solid var(--line)}
+  .re-feats{list-style:none;margin:6px 0 4px}
+  .re-feats li{display:flex;align-items:flex-start;gap:11px;font-size:13.5px;padding:5px 0;color:#dbe4e5}
+  .re-feats li .ck{flex:none;width:17px;height:17px;margin-top:1px}
+  .re-feats li b{color:#fff;font-weight:700}
+
+  /* ---------- CTA ---------- */
+  .re-cta{
+    display:block;width:100%;margin-top:16px;
+    background:var(--teal);color:#fff;border:none;cursor:pointer;
+    font-family:'Gilroy','Poppins',sans-serif;font-weight:700;font-size:16.5px;
+    padding:15px;border-radius:14px;transition:.2s;
+    box-shadow:0 12px 28px rgba(0,128,136,.42);
+  }
+  .re-cta:hover{background:#009aa3;transform:translateY(-1px);box-shadow:0 16px 34px rgba(0,128,136,.5)}
+  .re-cta:active{transform:translateY(0)}
+  .re-cta:focus-visible{outline:2px solid var(--teal-bright);outline-offset:3px}
+
+  /* ---------- Expired state ---------- */
+  .re-expired{display:none;text-align:center;padding:14px 0 4px}
+  .re-modal.is-expired .re-timer-wrap,
+  .re-modal.is-expired .re-badge,
+  .re-modal.is-expired .re-was .old::after{display:none}
+  .re-modal.is-expired .re-expired{display:block}
+
+  @media (max-width:420px){
+    .re-modal{padding:26px 20px 22px;border-radius:22px}
+    .re-head h1{font-size:25px}
+    .re-price .now{font-size:44px}
+    .re-unit .num{font-size:24px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important}
+    .re-was .old.struck::after{transform:scaleX(1)}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== PREVIEW-ONLY faux dashboard (remove in production) ===== -->
+<div class="demo-dashboard" aria-hidden="true">
+  <div class="dd-top">
+    <span class="dd-logo">REsimpli</span>
+    <span class="dd-pill" style="width:90px"></span>
+    <span class="dd-pill" style="width:70px"></span>
+    <span class="dd-pill" style="width:70px"></span>
+    <span class="dd-pill" style="width:110px;margin-left:auto"></span>
+  </div>
+  <div class="dd-grid">
+    <div class="dd-kpi"><div class="dd-pill"></div><div class="dd-num"></div></div>
+    <div class="dd-kpi"><div class="dd-pill"></div><div class="dd-num"></div></div>
+    <div class="dd-kpi"><div class="dd-pill"></div><div class="dd-num"></div></div>
+    <div class="dd-kpi"><div class="dd-pill"></div><div class="dd-num"></div></div>
+  </div>
+  <div class="dd-wide"></div>
+</div>
+<!-- ===== end preview-only ===== -->
+
+<!-- ===== UPGRADE MODAL (this is the deliverable) ===== -->
+<div class="re-overlay" id="reOverlay" role="dialog" aria-modal="true" aria-labelledby="reTitle">
+  <div class="re-modal" id="reModal">
+    <button class="re-close" id="reClose" aria-label="Close">&#10005;</button>
+
+    <span class="re-badge"><span class="dot"></span>Limited-time offer &middot; 25% off</span>
+
+    <div class="re-head">
+      <h1 id="reTitle">Everything <span class="em">unlimited</span>. 25% off.</h1>
+      <p class="re-sub">Upgrade to the Unlimited plan and stop watching the meter on calls, texts, and emails.</p>
+    </div>
+
+    <div class="re-timer-wrap">
+      <div class="re-timer-label">Offer ends in</div>
+      <div class="re-timer" id="reTimer">
+        <div class="re-unit"><div class="num" id="reD">07</div><div class="lab">Days</div></div>
+        <div class="re-unit"><div class="num" id="reH">00</div><div class="lab">Hours</div></div>
+        <div class="re-unit"><div class="num" id="reM">00</div><div class="lab">Mins</div></div>
+        <div class="re-unit"><div class="num" id="reS">00</div><div class="lab">Secs</div></div>
+      </div>
+    </div>
+
+    <div class="re-toggle" role="tablist" aria-label="Billing period">
+      <button id="reAnnual" class="active" role="tab" aria-selected="true">Annual<span class="save">save more</span></button>
+      <button id="reMonthly" role="tab" aria-selected="false">Monthly</button>
+    </div>
+
+    <div class="re-price">
+      <span class="now" id="reNow">$1,499</span>
+      <span class="per" id="rePer">/mo billed annually</span>
+    </div>
+    <div class="re-was">
+      <span class="old struck" id="reOld">$1,999/mo</span>
+      <span class="re-chip" id="reSave">Save $6,000/yr</span>
+    </div>
+
+    <p class="re-feats-head">All features included, plus:</p>
+    <ul class="re-feats">
+      <li><svg class="ck" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#4fc3cc" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>15 users</b> included</span></li>
+      <li><svg class="ck" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#4fc3cc" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Unlimited</b> calling minutes &amp; SMS</span></li>
+      <li><svg class="ck" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#4fc3cc" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Unlimited</b> emails</span></li>
+      <li><svg class="ck" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#4fc3cc" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Unlimited</b> list stacking records</span></li>
+      <li><svg class="ck" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#4fc3cc" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Unlimited</b> eSignatures</span></li>
+      <li><svg class="ck" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#4fc3cc" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>50,000</b> List Builder credits/mo</span></li>
+      <li><svg class="ck" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#4fc3cc" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Triple Line Dialer</span></li>
+    </ul>
+
+    <div class="re-expired">
+      <p style="color:var(--muted);font-size:14px">This offer has ended. Unlimited is still available at standard pricing.</p>
+    </div>
+
+    <button class="re-cta" id="reCta">Upgrade and save 25%</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* ================= CONFIG — edit these ================= */
+  const CONFIG = {
+    // Offer end. For the preview this ticks a full 7 days from load.
+    // For PRODUCTION, set a fixed date so it does NOT reset per visit, e.g.:
+    //   offerEnd: new Date('2026-08-26T23:59:59-05:00')
+    offerEnd: new Date(Date.now() + 7*24*60*60*1000),
+
+    // Displayed prices (already 25% off). Regular prices shown struck through.
+    annual:  { now:'$1,499', per:'/mo billed annually', old:'$1,999/mo', save:'Save $6,000/yr' },
+    monthly: { now:'$1,874', per:'/mo',                 old:'$2,499/mo', save:'Save $625/mo'   },
+
+    upgradeUrl: '#',            // where "Upgrade" sends the user
+  };
+  /* ====================================================== */
+
+  const $ = id => document.getElementById(id);
+  const overlay = $('reOverlay'), modal = $('reModal');
+
+  // ---- Billing toggle ----
+  function setPlan(plan){
+    const p = CONFIG[plan];
+    $('reNow').textContent = p.now;
+    $('rePer').textContent = p.per;
+    $('reOld').textContent = p.old;
+    $('reSave').textContent = p.save;
+    const a = plan==='annual';
+    $('reAnnual').classList.toggle('active',a);
+    $('reMonthly').classList.toggle('active',!a);
+    $('reAnnual').setAttribute('aria-selected',a);
+    $('reMonthly').setAttribute('aria-selected',!a);
+    // replay the strike animation
+    const old = $('reOld'); old.classList.remove('struck');
+    void old.offsetWidth; old.classList.add('struck');
+  }
+  $('reAnnual').onclick = ()=>setPlan('annual');
+  $('reMonthly').onclick = ()=>setPlan('monthly');
+
+  // ---- Countdown ----
+  const pad = n => String(n).padStart(2,'0');
+  function tick(){
+    const diff = CONFIG.offerEnd - new Date();
+    if(diff <= 0){
+      modal.classList.add('is-expired');
+      $('reD').textContent=$('reH').textContent=$('reM').textContent=$('reS').textContent='00';
+      $('reCta').textContent = 'View Unlimited plan';
+      clearInterval(timerId);
+      return;
+    }
+    const s = Math.floor(diff/1000);
+    $('reD').textContent = pad(Math.floor(s/86400));
+    $('reH').textContent = pad(Math.floor(s%86400/3600));
+    $('reM').textContent = pad(Math.floor(s%3600/60));
+    $('reS').textContent = pad(s%60);
+  }
+  tick();
+  const timerId = setInterval(tick,1000);
+
+  // ---- Actions ----
+  function close(){ overlay.classList.add('re-hidden'); }
+  $('reClose').onclick = close;
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) close(); });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
+
+  $('reCta').onclick = function(){
+    // Wire this to your real upgrade flow.
+    console.log('Upgrade clicked', {plan: $('reAnnual').classList.contains('active')?'annual':'monthly'});
+    if(CONFIG.upgradeUrl && CONFIG.upgradeUrl!=='#'){ window.location.href = CONFIG.upgradeUrl; }
+  };
+
+  setPlan('annual');
+})();
+</script>
+</body>
+</html>
