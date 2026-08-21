@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snap-Apart Mailer Templates — Proof v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Caveat:wght@500;600;700&family=Roboto+Mono:wght@500;600&family=Bebas+Neue&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1b1f24; --ink-soft:#5b6470; --line:#e4e7ec; --paper:#f6f7f9;
+    --panel:#ffffff; --accent:#008088; --lock:#9aa3ad; --lock-bg:#eef1f4;
+    --edit:#008088; --reveal:#8a6d00;
+    --pw:816px; --ph:1056px; --marg:54px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--paper);}
+
+  .app{display:grid;grid-template-columns:296px 1fr;min-height:100vh;}
+  .side{background:var(--panel);border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px;}
+  .brand{font-weight:700;font-size:15px;letter-spacing:-.01em;}
+  .brand small{display:block;font-weight:500;color:var(--ink-soft);font-size:12px;margin-top:3px;line-height:1.4;}
+  .side h4{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin:22px 4px 8px;}
+  .tlist{display:flex;flex-direction:column;gap:4px;}
+  .titem{text-align:left;border:1px solid transparent;background:transparent;border-radius:9px;padding:9px 10px;cursor:pointer;display:flex;flex-direction:column;gap:4px;font-family:inherit;}
+  .titem:hover{background:var(--paper);}
+  .titem.on{background:#f0fbfb;border-color:#bfe6e6;}
+  .titem .tn{font-size:13px;font-weight:600;line-height:1.25;display:flex;align-items:center;gap:8px;}
+  .titem .sw2{width:11px;height:11px;border-radius:3px;flex:none;}
+  .titem .tc{font-size:11px;color:var(--ink-soft);}
+  .side .fields{font-size:11px;color:var(--ink-soft);line-height:1.7;background:var(--paper);border-radius:9px;padding:10px 12px;}
+  .side .fields code{font-family:'Roboto Mono',monospace;font-size:10.5px;color:var(--ink);}
+
+  .main{min-width:0;}
+  .bar{position:sticky;top:0;z-index:20;background:rgba(246,247,249,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:12px 22px;flex-wrap:wrap;}
+  .bar .grp{display:flex;align-items:center;gap:8px;}
+  .bar label{font-size:12px;color:var(--ink-soft);}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;}
+  .seg button{border:0;background:#fff;font-family:inherit;font-size:12px;padding:6px 12px;cursor:pointer;color:var(--ink-soft);}
+  .seg button.on{background:var(--ink);color:#fff;}
+  .bar input[type=range]{width:120px;}
+  .toggle{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-soft);cursor:pointer;}
+  .btn{border:1px solid var(--line);background:#fff;font-family:inherit;font-size:12px;font-weight:600;padding:7px 14px;border-radius:8px;cursor:pointer;color:var(--ink);}
+  .spacer{flex:1;}
+  .legend{display:flex;gap:16px;padding:8px 22px;font-size:11px;color:var(--ink-soft);border-bottom:1px solid var(--line);background:#fff;flex-wrap:wrap;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .sw{width:12px;height:12px;border-radius:3px;}
+  .sw.lk{background:var(--lock-bg);border:1px dashed var(--lock);}
+  .sw.ed{background:#eafafa;border:1px dashed var(--edit);}
+  .sw.rv{background:#fbf5df;border:1px dashed var(--reveal);}
+  .stage{padding:34px;display:flex;flex-direction:column;align-items:center;gap:40px;}
+  .scaler{transform-origin:top center;}
+
+  .page{width:var(--pw);height:var(--ph);background:#fff;position:relative;box-shadow:0 6px 30px rgba(20,25,35,.12);overflow:hidden;color:#111;}
+  .page .plabel{position:absolute;top:-26px;left:0;font-size:12px;font-weight:600;color:var(--ink-soft);font-family:'Inter';}
+  .pwrap{position:relative;margin-top:26px;}
+  .rail{position:absolute;top:0;bottom:0;width:var(--marg);display:flex;align-items:center;justify-content:center;color:#9aa0a6;z-index:3;}
+  .rail.l{left:0;} .rail.r{right:0;}
+  .rail span{writing-mode:vertical-rl;transform:rotate(180deg);font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;}
+  .rail .b{font-weight:700;color:#7b8288;}
+  .rail.r span{transform:none;}
+  .tick{position:absolute;width:12px;height:12px;border:solid #b7bcc2;z-index:3;}
+  .foldnote{position:absolute;font-size:8px;letter-spacing:.14em;color:#aeb3b9;text-transform:uppercase;}
+
+  .z{position:relative;}
+  .guides .ed-z{outline:1px dashed var(--edit);outline-offset:3px;}
+  .guides .rv-z{outline:1px dashed var(--reveal);outline-offset:3px;}
+  .guides .lk-z{outline:1px dashed var(--lock);outline-offset:3px;}
+  .badge{position:absolute;top:-9px;left:0;font-family:'Inter';font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 6px;border-radius:5px;text-transform:uppercase;pointer-events:none;z-index:5;}
+  .badge.ed{background:var(--edit);color:#fff;} .badge.rv{background:var(--reveal);color:#fff;} .badge.lk{background:var(--lock);color:#fff;}
+  body:not(.guides) .badge{display:none;}
+  [contenteditable]:focus{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px;}
+
+  /* OUTSIDE */
+  .o-reveal{position:absolute;left:var(--marg);right:var(--marg);top:40px;height:330px;padding:26px 32px;}
+  .o-mid{position:absolute;left:var(--marg);right:var(--marg);top:432px;display:flex;gap:24px;}
+  .o-hook{flex:1.05;}
+  .o-addr{flex:1;padding-top:4px;}
+  .lock-line{font-family:'Roboto Mono',monospace;font-size:13px;color:#222;line-height:1.5;}
+  .imb{height:22px;margin:14px 0 8px;display:flex;align-items:flex-end;gap:1.3px;}
+  .imb i{display:block;width:1.6px;background:#111;}
+  .o-barcode{position:absolute;left:var(--marg);right:var(--marg);bottom:34px;height:300px;}
+  .o-barcode canvas{width:100%;height:100%;display:block;}
+
+  /* INSIDE */
+  .i-head{position:absolute;left:var(--marg);right:var(--marg);top:44px;z-index:2;}
+  .i-logo{font-weight:700;letter-spacing:.02em;line-height:1.05;}
+  .i-row{display:flex;justify-content:space-between;align-items:center;}
+  .i-contact{text-align:right;line-height:1.5;font-size:13px;}
+  .i-body{position:absolute;left:var(--marg);right:var(--marg);top:150px;font-size:14px;line-height:1.55;color:#1a1a1a;z-index:2;}
+  .i-body p{margin:0 0 12px;}
+  .i-greet{font-weight:600;margin-bottom:12px;}
+  .i-kick{font-weight:700;margin:6px 0 6px;}
+  .i-sig{font-family:'Caveat',cursive;font-size:32px;color:#222;display:inline-block;border-bottom:1px solid #b9bec4;padding:0 40px 2px 4px;margin-top:8px;}
+  .i-name{font-size:14px;font-weight:600;color:#111;margin-top:5px;}
+
+  /* bullets */
+  .bul-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px 22px;margin:10px 0 14px;}
+  .bcell{position:relative;padding-left:22px;font-size:13.5px;}
+  .bcell .mk{position:absolute;left:0;top:0;font-weight:800;}
+  .bbox{position:relative;padding:7px 9px 7px 24px;border:1px solid #e2e5e9;border-left:3px solid;border-radius:4px;font-size:12.5px;background:#fff;}
+  .bbox .mk{position:absolute;left:9px;top:7px;font-weight:800;}
+  .bul-chip{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px;}
+  .bchip{border:1.5px solid;border-radius:999px;padding:4px 13px;font-size:12.5px;font-weight:600;background:#fff;}
+
+  .perf-doc{position:absolute;left:var(--marg);right:var(--marg);display:flex;align-items:center;justify-content:center;gap:14px;font-size:12px;font-weight:800;letter-spacing:.06em;color:#111;z-index:2;}
+  .perf-doc .ln{flex:1;border-top:2px dashed #b9bec4;}
+
+  .check{position:absolute;left:var(--marg);right:var(--marg);bottom:72px;height:224px;border:1px solid #b9c0c8;border-radius:6px;padding:18px 20px;overflow:hidden;z-index:2;}
+  .check .cwm{position:absolute;right:18px;top:52px;font-size:48px;font-weight:800;color:rgba(0,0,0,.05);letter-spacing:.1em;transform:rotate(-8deg);pointer-events:none;}
+  .check-top{display:flex;justify-content:space-between;align-items:flex-start;}
+  .check .cco{font-size:15px;font-weight:700;}
+  .check .csub{font-size:12px;color:#333;margin-top:2px;}
+  .check .cdate{border-bottom:1px solid #333;min-width:120px;text-align:center;font-size:12px;padding-bottom:2px;}
+  .check .cdate small{display:block;font-size:8px;color:#666;border:0;letter-spacing:.1em;}
+  .check .payrow{display:flex;align-items:flex-end;gap:10px;margin-top:18px;}
+  .check .payto{font-size:8px;letter-spacing:.06em;color:#555;line-height:1.3;text-transform:uppercase;flex:none;}
+  .check .payname{flex:1;border-bottom:1px solid #333;font-size:15px;padding-bottom:3px;font-weight:600;}
+  .check .amtbox{border:1.5px solid #333;padding:6px 12px;font-size:15px;font-weight:700;min-width:120px;text-align:center;}
+  .check .dollars{margin-top:14px;border-bottom:1px solid #333;padding-bottom:3px;display:flex;justify-content:flex-end;font-size:9px;letter-spacing:.1em;color:#666;text-transform:uppercase;}
+  .check .cfoot{display:flex;justify-content:space-between;align-items:flex-end;margin-top:14px;}
+  .check .memo small{font-size:8px;color:#555;letter-spacing:.08em;text-transform:uppercase;}
+  .check .memoline{border-bottom:1px solid #333;min-width:190px;font-size:12px;padding-bottom:2px;color:#222;}
+  .check .csig{border-bottom:1px solid #333;min-width:190px;text-align:center;padding-bottom:2px;line-height:1;font-family:'Caveat',cursive;font-size:26px;}
+  .check .micr{font-family:'Roboto Mono',monospace;font-size:14px;letter-spacing:3px;color:#111;margin-top:10px;}
+  .check-disc{position:absolute;left:var(--marg);right:var(--marg);bottom:46px;text-align:center;font-size:10.5px;font-style:italic;color:#555;z-index:2;}
+
+  @media print{
+    @page{size:8.5in 11in;margin:0;}
+    body{background:#fff;}
+    .side,.bar,.legend{display:none!important;}
+    .app{display:block;}
+    .stage{padding:0;gap:0;}
+    .scaler{transform:none!important;}
+    .page{box-shadow:none;page-break-after:always;break-after:page;}
+    .plabel{display:none!important;} .pwrap{margin-top:0;}
+    .badge{display:none!important;}
+    .ed-z,.rv-z,.lk-z{outline:none!important;}
+  }
+</style>
+</head>
+<body class="guides">
+<div class="app">
+  <aside class="side">
+    <div class="brand">Snap-Apart Mailer Templates
+      <small>10 templates &middot; 8.5&times;11 two-sided &middot; white-label</small>
+    </div>
+    <h4>Templates</h4>
+    <div class="tlist" id="tlist"></div>
+    <h4>Merge fields</h4>
+    <div class="fields">
+      <b>Recipient (locked):</b> <code>&lt;&lt;FIRSTNAME&gt;&gt;</code> <code>&lt;&lt;LASTNAME&gt;&gt;</code> <code>&lt;&lt;ADDRESS&gt;&gt;</code> <code>&lt;&lt;CITY&gt;&gt;</code> <code>&lt;&lt;STATE&gt;&gt;</code> <code>&lt;&lt;ZIPCODE&gt;&gt;</code><br><br>
+      <b>Editable:</b> <code>&lt;&lt;Logo&gt;&gt;</code> <code>&lt;&lt;InvestorName&gt;&gt;</code> <code>&lt;&lt;Signature&gt;&gt;</code> <code>&lt;&lt;Phone&gt;&gt;</code> <code>&lt;&lt;Website&gt;&gt;</code> <code>&lt;&lt;PropertyAddress&gt;&gt;</code> <code>&lt;&lt;OfferAmount&gt;&gt;</code> <code>&lt;&lt;Date&gt;&gt;</code> <code>&lt;&lt;CompanyName&gt;&gt;</code> (cheque only)
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="bar">
+      <div class="grp"><label>View</label>
+        <div class="seg" id="viewSeg">
+          <button data-v="both" class="on">Both</button>
+          <button data-v="outside">Outside</button>
+          <button data-v="inside">Inside</button>
+        </div>
+      </div>
+      <div class="grp"><label>Zoom</label>
+        <input type="range" id="zoom" min="45" max="100" value="70">
+        <span id="zoomv" style="font-size:12px;color:var(--ink-soft);width:34px;">70%</span>
+      </div>
+      <label class="toggle"><input type="checkbox" id="guides" checked> Show zone labels</label>
+      <div class="spacer"></div>
+      <button class="btn" id="printBtn">Print / PDF</button>
+    </div>
+    <div class="legend">
+      <span><span class="sw lk"></span> Locked by printer</span>
+      <span><span class="sw ed"></span> Editable (click to edit)</span>
+      <span><span class="sw rv"></span> Reveal panel (hidden until torn)</span>
+    </div>
+    <div class="stage"><div class="scaler" id="scaler"></div></div>
+  </main>
+</div>
+
+<script>
+const CAVEAT="'Caveat',cursive", LORA="'Lora',serif", OSWALD="'Oswald',sans-serif",
+      ANTON="'Anton',sans-serif", INTER="'Inter',sans-serif", MONO="'Roboto Mono',monospace",
+      BEBAS="'Bebas Neue',sans-serif", PLAYFAIR="'Playfair Display',serif";
+
+/* Distinct identity per template. Headers are uniform (logo + phone/website);
+   variety now comes from color, paper, fonts, bullets, hook + cheque. */
+const THEMES = {
+  notice:{accent:'#b0161c',accent2:'#7a0f13',paper:'#ffffff',body:INTER,hook:ANTON,logo:ANTON,bullet:'square',bstyle:'marker',checkTint:'#ffffff'},
+  clean:{accent:'#123a5c',accent2:'#c2953f',paper:'#ffffff',body:INTER,hook:OSWALD,logo:OSWALD,bullet:'check',bstyle:'chip',checkTint:'#f4f8fc'},
+  hand:{accent:'#1a3a6b',accent2:'#c0392b',paper:'#fffdf0',body:CAVEAT,hook:CAVEAT,logo:CAVEAT,bullet:'none',bstyle:'marker',notepad:true},
+  probate:{accent:'#5a4632',accent2:'#7c8a5f',paper:'#f7f2e9',body:LORA,hook:PLAYFAIR,logo:PLAYFAIR,bullet:'dot',bstyle:'marker',checkTint:'#f7f2e9'},
+  discreet:{accent:'#2f3640',accent2:'#c9861f',paper:'#ffffff',body:INTER,hook:OSWALD,logo:OSWALD,bullet:'dash',bstyle:'marker'},
+  landlord:{accent:'#0f766e',accent2:'#f2b705',paper:'#ffffff',body:INTER,hook:OSWALD,logo:OSWALD,bullet:'check',bstyle:'chip'},
+  equity:{accent:'#0b6b3a',accent2:'#b8892b',paper:'#ffffff',body:INTER,hook:OSWALD,logo:OSWALD,bullet:'check',bstyle:'marker',checkTint:'#f2f8f2'},
+  vacant:{accent:'#37475a',accent2:'#e2571e',paper:'#ffffff',body:INTER,hook:BEBAS,logo:BEBAS,bullet:'arrow',bstyle:'box'},
+  deadline:{accent:'#111111',accent2:'#e2571e',paper:'#ffffff',body:INTER,hook:ANTON,logo:BEBAS,bullet:'square',bstyle:'marker',checkTint:'#fff7f2',stamp:true},
+  neighbor:{accent:'#3f6b3a',accent2:'#a9743b',paper:'#f5efe4',body:INTER,hook:CAVEAT,logo:CAVEAT,bullet:'none',bstyle:'marker'}
+};
+const BULLETS={check:'\u2713',arrow:'\u2192',dash:'\u2013',dot:'\u2022',square:'\u25AA'};
+
+const TEMPLATES = [
+{ id:'t1', name:'First Notice — Claim Your Check', concept:'Urgency + sample cheque', theme:'notice', hasCheck:true,
+  reveal:{title:'Why did you get this?', body:'Because I am actively buying homes in <<CITY>> right now, and yours is one I would like to make an offer on. Tear this open to see a sample of the kind of cash offer I make, then call the number inside for your real number.'},
+  hook:{badge:'FIRST NOTICE', headline:'CLAIM YOUR CHECK!', note:'TO BE OPENED BY THE ADDRESSEE ONLY.\nPLEASE RESPOND WITHIN FIVE DAYS.'},
+  inside:{greet:'Dear <<FIRSTNAME>>,',
+    lead:'I want to buy your house at <<PropertyAddress>>, as-is, for cash.',
+    body:['My name is <<InvestorName>>. I am a local real estate investor, not an agent, so I am not asking to list your home. I am offering to buy it directly. Here is what that means for you:'],
+    bullets:['Sell as-is','No repairs','No cleaning','No agents','No commissions','No showings','A full cash offer','You pick the closing date'],
+    close:['The cheque below is a sample of the kind of offer I make. It is not real money. To get your actual number, I just need a few minutes to learn about your property.'],
+    kick:'Call or text me today:'} },
+
+{ id:'t2', name:'Straight Cash Offer', concept:'Clean, professional', theme:'clean', hasCheck:false,
+  reveal:{title:'A real offer for <<PropertyAddress>>', body:'No pressure and no obligation. If selling has ever crossed your mind, this is a simple way to find out what a cash sale would look like. Open this and read the note inside.'},
+  hook:{badge:'', headline:'A CASH OFFER FOR YOUR HOME', note:'Open to see what a simple, direct sale could look like for you.'},
+  inside:{greet:'Hi <<FIRSTNAME>>,',
+    lead:'My name is <<InvestorName>>, and I would like to make you a straightforward cash offer on <<PropertyAddress>>.',
+    body:['I am a local buyer, not an agent, so I am not going to list your home. I buy houses directly with my own funds, which keeps the whole thing simple. A short phone call is all it takes for me to put a real number in front of you.'],
+    bullets:['Sell as-is','Any condition','No agents','No commissions','No listing fees','I cover closing costs','Cash, not financing','You pick the date'],
+    close:['If the timing is not right, no problem at all. Keep my number in case that changes.'],
+    kick:'Call or text when you are ready:'} },
+
+{ id:'t3', name:'Handwritten "Yellow Letter"', concept:'Personal, high-response', theme:'hand', hasCheck:false,
+  reveal:{title:'Hi <<FIRSTNAME>>,', body:'I hope this finds you well. I am writing you by hand because I mean it. Flip this open for my quick note.'},
+  hook:{badge:'', headline:'Quick question about your house', note:'Open this \u2014 it will only take a minute to read.'},
+  inside:{greet:'Hi <<FIRSTNAME>>,',
+    lead:'I am interested in buying your house at <<PropertyAddress>>. I know this is out of the blue, so I will keep it short.',
+    body:['I am a local buyer, I pay cash, and I can work around whatever timeline you need. You would not have to fix anything or clean anything.','Would you be open to a quick chat? If so, give me a call or a text. If not, no worries at all.'],
+    bullets:[],
+    close:['Thanks for reading this.'],
+    kick:'My number is:'} },
+
+{ id:'t4', name:'Probate / Inherited Home', concept:'Empathetic, for families', theme:'probate', hasCheck:false,
+  reveal:{title:'If you recently inherited a home', body:'Sorting out a property after losing someone is a lot to carry. If it would help to have one less thing on your plate, please read the note inside. There is no rush and no pressure.'},
+  hook:{badge:'', headline:'Help with an inherited property', note:'A simple option if you have a home you did not plan to keep.'},
+  inside:{greet:'Dear <<FIRSTNAME>>,',
+    lead:'If you recently inherited the property at <<PropertyAddress>>, I may be able to make this easier for you.',
+    body:['I am <<InvestorName>>, a local home buyer. I work with a lot of families who end up with a house they did not expect and are not sure what to do with. You do not need to clear it out, clean it, or fix a single thing.'],
+    bullets:['As-is, contents included','No cleanouts','No repairs','No agents','Fair cash offer','Timeline you control','Attorney-friendly','No obligation'],
+    close:['When you are ready to talk, I am here. There is no obligation in a conversation.'],
+    kick:'Reach me anytime:'} },
+
+{ id:'t5', name:'Pre-Foreclosure Options', concept:'Discreet, time-sensitive', theme:'discreet', hasCheck:false,
+  reveal:{title:'You have more options than you think', body:'Falling behind on a mortgage happens to good people, and it is not the end of the road. Open this for a few options that could help you protect your equity and your credit.'},
+  hook:{badge:'TIME-SENSITIVE', headline:'Options for your home', note:'Private and confidential. Please open and read soon.'},
+  inside:{greet:'Dear <<FIRSTNAME>>,',
+    lead:'If you have fallen behind on the mortgage at <<PropertyAddress>>, you still have options.',
+    body:['I am <<InvestorName>>, a local buyer who works with homeowners in tough spots. A fast cash sale is one option. It can let you walk away with money in your pocket and stop the process before it hurts your credit further. It is not the only path, but it is worth knowing about.'],
+    bullets:['Close before auction','Stop the process','Protect your credit','Walk away with cash','No repairs','No fees','Private & confidential','Honest advice'],
+    close:['Even if we never do business, a short call could give you a clearer picture. Please do not wait.'],
+    kick:'Call or text me directly:'} },
+
+{ id:'t6', name:'Tired Landlord / Absentee', concept:'Done being a landlord', theme:'landlord', hasCheck:false,
+  reveal:{title:'Done being a landlord?', body:'Tenants, turnovers, repairs, and late-night calls add up. If you are ready to be finished with all of it, open this for a clean way out.'},
+  hook:{badge:'', headline:'Ready to stop being a landlord?', note:'Sell your rental without the hassle. Open to see how.'},
+  inside:{greet:'Hi <<FIRSTNAME>>,',
+    lead:'I am interested in buying your rental at <<PropertyAddress>>, and I would like to take the hassle off your hands.',
+    body:['I am <<InvestorName>>, a local investor. I buy rental properties directly, so you skip listing, showings, and waiting on a retail buyer who may or may not close. You do not even need to wait for the lease to end.'],
+    bullets:['Sell with tenants in place','No make-ready','No repairs','No agents','No commissions','Cash offer','Close on your date','Multiple properties OK'],
+    close:['If you have more than one property you are ready to let go of, even better. Let us talk.'],
+    kick:'Call or text me today:'} },
+
+{ id:'t7', name:'High-Equity / Free & Clear', concept:'Worth more than you think', theme:'equity', hasCheck:true,
+  reveal:{title:'Your home may be worth more than you think', body:'Homes in <<CITY>> have moved a lot. If you own yours with little or no mortgage, that value is sitting there. Open this to see a sample of what I could offer you in cash.'},
+  hook:{badge:'', headline:'What is your home really worth?', note:'You may be sitting on more equity than you realize. Open this.'},
+  inside:{greet:'Hi <<FIRSTNAME>>,',
+    lead:'My name is <<InvestorName>>, and I would like to make a cash offer on <<PropertyAddress>>. It may be higher than you expect.',
+    body:['If you own your home outright or owe very little, almost everything from a sale goes straight to you. The cheque below is only a sample to show the kind of offer I make. Your real number depends on your home, and I can give you that after a short call.'],
+    bullets:['Keep your equity','No commissions','No repairs','No prep','I cover closing costs','Cash offer','You pick the date','No obligation'],
+    close:['There is no cost and no obligation to find out your number.'],
+    kick:'Call or text me today:'} },
+
+{ id:'t8', name:'Vacant / Distressed Property', concept:'Any condition', theme:'vacant', hasCheck:false,
+  reveal:{title:'We buy houses that need work', body:'A house that has been sitting empty or needs major repairs is hard to sell the normal way. It is exactly what I look for. Open this to see how simple it can be.'},
+  hook:{badge:'', headline:'WE BUY HOUSES THAT NEED WORK', note:'Vacant, damaged, or just plain tired. Open this.'},
+  inside:{greet:'Hi <<FIRSTNAME>>,',
+    lead:'I am interested in buying your property at <<PropertyAddress>>, even if it needs a lot of work.',
+    body:['I am <<InvestorName>>, a local investor. Water damage, an old roof, code issues, or a house that has sat empty for years does not scare me off. Repairs are my problem after we close, not yours. You will not spend a dollar fixing it up or a weekend cleaning it out.'],
+    bullets:['Any condition','Major repairs OK','No inspections','No cleanup','No agents','No fees','Cash offer','Close fast'],
+    close:['If the property has been a headache, let me take it off your list.'],
+    kick:'Call or text me today:'} },
+
+{ id:'t9', name:'Limited-Time Offer', concept:'Deadline urgency + cheque', theme:'deadline', hasCheck:true,
+  reveal:{title:'This offer is only good for the next 7 days', body:'I am buying a limited number of homes in <<CITY>> this month and yours is on my short list. Open this to see a sample offer, then call within 7 days to lock in your real number.'},
+  hook:{badge:'EXPIRES IN 7 DAYS', headline:'YOUR CASH OFFER IS WAITING', note:'Respond within 7 days to claim your offer.'},
+  inside:{greet:'Hi <<FIRSTNAME>>,',
+    lead:'I have a cash offer set aside for <<PropertyAddress>>, but it is only good for the next 7 days.',
+    body:['I am <<InvestorName>>, a local buyer. I only take on a handful of homes at a time, so I am reaching out to a small list of owners this month. The cheque below is a sample of the kind of offer I make. It is not real money. To turn it into a real number, I just need a quick call before the deadline.'],
+    bullets:['Firm cash offer','No financing to fall through','Sell as-is','No repairs','No commissions','No fees','Close on your date','Offer expires soon'],
+    close:['After 7 days, I move on to the next set of homes. Please do not let this one pass.'],
+    kick:'Call or text within 7 days:'} },
+
+{ id:'t10', name:'Local Neighbor', concept:'Trust-based, personal', theme:'neighbor', hasCheck:false,
+  reveal:{title:'I buy houses right here in <<CITY>>', body:'I am not a big out-of-state company. I am a local buyer who works in your area. Open this for a quick, honest note about your home.'},
+  hook:{badge:'', headline:'A local buyer, right in your area', note:'Not a big company. Just someone who buys homes nearby. Open this.'},
+  inside:{greet:'Hi <<FIRSTNAME>>,',
+    lead:'I buy homes right here in <<CITY>>, and I am interested in yours at <<PropertyAddress>>.',
+    body:['I am not a national company or a hedge fund. I am a local buyer, so when you call, you talk to me, not a call center. I pay cash and I keep things simple.','If you have thought about selling, even someday, I would love to talk. If not, thanks for reading and I wish you well.'],
+    bullets:[],
+    close:['You can call or text me directly. It is always me on the other end.'],
+    kick:'Here is my number:'} }
+];
+
+function railHTML(){
+  return `
+    <div class="rail l"><span><b class="b">Remove these side edges first</b> &nbsp; Fold, crease and tear along perforation</span></div>
+    <div class="rail r"><span><b class="b">Remove these side edges first</b> &nbsp; Fold, crease and tear along perforation</span></div>
+    <div class="tick" style="top:6px;left:6px;border-width:2px 0 0 2px;"></div>
+    <div class="tick" style="top:6px;right:6px;border-width:2px 2px 0 0;"></div>
+    <div class="tick" style="bottom:6px;left:6px;border-width:0 0 2px 2px;"></div>
+    <div class="tick" style="bottom:6px;right:6px;border-width:0 2px 2px 0;"></div>`;
+}
+
+/* uniform, simple letterhead: logo left, phone + website right, thin accent rule */
+function headerHTML(t, th){
+  const logoSize = th.notepad ? 34 : 26;
+  const rule = th.notepad ? '' : `<div style="height:2px;background:${th.accent};margin-top:12px;"></div>`;
+  return `
+  <div class="i-head ed-z z">
+    <div class="badge ed">Letterhead \u00b7 editable</div>
+    <div class="i-row">
+      <div class="i-logo" contenteditable="true" style="font-family:${th.logo};color:#111;font-size:${logoSize}px;">&lt;&lt;Logo&gt;&gt;</div>
+      <div class="i-contact" style="font-family:${th.notepad?th.body:INTER};${th.notepad?'font-size:17px;':''}">
+        <div contenteditable="true">&lt;&lt;Phone&gt;&gt;</div>
+        <div contenteditable="true" style="color:#555;">&lt;&lt;Website&gt;&gt;</div>
+      </div>
+    </div>
+    ${rule}
+  </div>`;
+}
+
+function bulletsHTML(t, th){
+  if(!t.inside.bullets.length || th.bullet==='none') return '';
+  const mk=BULLETS[th.bullet]||'\u2713';
+  const style=th.bstyle||'marker';
+  if(style==='chip'){
+    return `<div class="bul-chip">${t.inside.bullets.map(b=>`<span class="bchip" style="border-color:${th.accent};color:${th.accent};">${b}</span>`).join('')}</div>`;
+  }
+  if(style==='box'){
+    return `<div class="bul-grid">${t.inside.bullets.map(b=>`<div class="bbox" style="border-left-color:${th.accent2};"><span class="mk" style="color:${th.accent};">${mk}</span>${b}</div>`).join('')}</div>`;
+  }
+  return `<div class="bul-grid">${t.inside.bullets.map(b=>`<div class="bcell"><span class="mk" style="color:${th.accent};">${mk}</span>${b}</div>`).join('')}</div>`;
+}
+
+function outsideHTML(t){
+  const th=THEMES[t.theme];
+  let badge='';
+  if(t.hook.badge){
+    badge = th.stamp
+      ? `<div class="z" style="display:inline-block;transform:rotate(-6deg);border:3px solid ${th.accent2};color:${th.accent2};font-family:${ANTON};font-size:20px;padding:4px 12px;margin-bottom:10px;letter-spacing:.04em;">${t.hook.badge}</div>`
+      : `<div class="z" style="display:inline-block;font-family:${th.hook};font-size:24px;color:#fff;background:${th.accent};padding:3px 12px;line-height:1.1;margin-bottom:8px;">${t.hook.badge}</div>`;
+  }
+  return `
+  <div class="page" style="background:${th.paper};">
+    <div class="plabel">Outside \u2014 mailing side (page 1)</div>
+    ${railHTML()}
+    <div class="o-reveal rv-z z">
+      <div class="badge rv">Reveal panel \u00b7 hidden until torn open</div>
+      <div contenteditable="true" style="font-family:${th.hook};color:${th.accent};font-size:30px;line-height:1.05;margin-bottom:12px;">${t.reveal.title}</div>
+      <div contenteditable="true" style="font-family:${th.body};font-size:15px;line-height:1.5;color:#222;max-width:88%;">${t.reveal.body}</div>
+    </div>
+    <div class="foldnote" style="left:var(--marg);top:378px;">\u2193 &nbsp; fold line &nbsp; \u2193</div>
+    <div class="o-mid">
+      <div class="o-hook ed-z z">
+        <div class="badge ed">Editable hook</div>
+        ${badge}
+        <div contenteditable="true" style="font-family:${th.hook};font-size:34px;line-height:1;color:#111;">${t.hook.headline}</div>
+        <div contenteditable="true" style="font-family:'Inter';font-size:11px;font-weight:600;color:${th.accent};margin-top:10px;white-space:pre-line;letter-spacing:.02em;">${t.hook.note}</div>
+      </div>
+      <div class="o-addr">
+        <div class="lk-z z" style="margin-bottom:20px;">
+          <div class="badge lk">Return \u00b7 locked</div>
+          <div class="lock-line">&lt;&lt;RETURNFIRST&gt;&gt; &lt;&lt;RETURNLAST&gt;&gt;<br>&lt;&lt;RETURNADDRESS&gt;&gt;<br>&lt;&lt;RETURNCITY&gt;&gt; &lt;&lt;RETURNSTATE&gt;&gt; &lt;&lt;RETURNZIP&gt;&gt;</div>
+        </div>
+        <div class="lk-z z">
+          <div class="badge lk">Recipient + barcode \u00b7 locked</div>
+          <div class="imb" data-imb></div>
+          <div class="lock-line">&lt;&lt;FIRSTNAME&gt;&gt; &lt;&lt;LASTNAME&gt;&gt;<br>&lt;&lt;ADDRESS&gt;&gt;<br>&lt;&lt;CITY&gt;&gt;, &lt;&lt;STATE&gt;&gt; &lt;&lt;ZIPCODE&gt;&gt;</div>
+        </div>
+      </div>
+    </div>
+    <div class="o-barcode lk-z z">
+      <div class="badge lk">Printer barcode zone \u00b7 locked</div>
+      <canvas data-noise width="708" height="300"></canvas>
+    </div>
+  </div>`;
+}
+
+function insideHTML(t){
+  const th=THEMES[t.theme];
+  const bodyParas = t.inside.body.map(p=>`<p contenteditable="true">${p}</p>`).join('');
+  const closeParas = t.inside.close.map(p=>`<p contenteditable="true">${p}</p>`).join('');
+
+  // notepad look for the whole letter page (template 3)
+  let pageStyle=`background:${th.paper};`;
+  let marginLine='';
+  let bodyExtra='';
+  if(th.notepad){
+    pageStyle=`background:#fffdf0;background-image:repeating-linear-gradient(#fffdf0,#fffdf0 33px,#b9d4e8 33px,#b9d4e8 34px);`;
+    marginLine=`<div style="position:absolute;top:0;bottom:0;left:96px;width:2px;background:#e0a3a3;z-index:1;"></div>`;
+    bodyExtra=`font-size:21px;line-height:34px;`;
+  }
+
+  const sizes = th.notepad
+    ? {greet:'22px', kick:'21px', phone:'26px', sig:'40px', name:'20px'}
+    : {greet:'15px', kick:'14px', phone:'20px', sig:'32px', name:'14px'};
+
+  const signoff = `
+    <div class="i-kick" contenteditable="true" style="font-family:${th.body};font-size:${sizes.kick};">${t.inside.kick}</div>
+    <div contenteditable="true" style="font-family:${th.body};font-size:${sizes.phone};font-weight:700;color:#111;">&lt;&lt;Phone&gt;&gt;</div>
+    <div class="i-sig" contenteditable="true" style="font-size:${sizes.sig};">&lt;&lt;Signature&gt;&gt;</div>
+    <div class="i-name" contenteditable="true" style="font-family:${th.body};font-size:${sizes.name};">&lt;&lt;InvestorName&gt;&gt;</div>`;
+
+  let lower;
+  if(t.hasCheck){
+    lower = `
+      <div class="perf-doc" style="top:672px;">
+        <span class="ln"></span><span>REMOVE DOCUMENT ALONG THIS PERFORATION</span><span class="ln"></span>
+      </div>
+      <div class="check ed-z z" style="background:${th.checkTint};background-image:repeating-linear-gradient(45deg,rgba(0,0,0,.015) 0 6px,transparent 6px 12px);">
+        <div class="badge ed">Sample cheque \u00b7 editable</div>
+        <div class="cwm">SAMPLE</div>
+        <div class="check-top">
+          <div>
+            <div class="cco" style="font-family:${th.logo};color:${th.accent};">&lt;&lt;CompanyName&gt;&gt;</div>
+            <div class="csub">Cash home buyer \u00b7 &lt;&lt;CITY&gt;&gt;, &lt;&lt;STATE&gt;&gt;</div>
+          </div>
+          <div class="cdate"><small>DATE</small>&lt;&lt;Date&gt;&gt;</div>
+        </div>
+        <div class="payrow">
+          <div class="payto">Pay to the<br>order of</div>
+          <div class="payname">&lt;&lt;FIRSTNAME&gt;&gt; &lt;&lt;LASTNAME&gt;&gt;</div>
+          <div style="font-size:20px;">$</div>
+          <div class="amtbox">&lt;&lt;OfferAmount&gt;&gt;</div>
+        </div>
+        <div class="dollars">Dollars</div>
+        <div class="cfoot">
+          <div class="memo"><small>Memo</small><div class="memoline">Cash offer for &lt;&lt;PropertyAddress&gt;&gt;</div></div>
+          <div class="csig">&lt;&lt;Signature&gt;&gt;</div>
+        </div>
+        <div class="micr">\u2062123456789\u2062 \u283f67890\u283f \u2062874\u2062</div>
+      </div>
+      <div class="check-disc" contenteditable="true">This is not a real cheque. To know your cash offer, please call &lt;&lt;Phone&gt;&gt;.</div>`;
+  } else {
+    lower = `
+      <div class="perf-doc" style="top:700px;">
+        <span class="ln"></span><span>DETACH AND KEEP THIS NUMBER</span><span class="ln"></span>
+      </div>
+      <div class="check ed-z z" style="background:${th.paper};border-style:dashed;border-color:${th.accent};height:210px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+        <div class="badge ed">Tear-off reminder card \u00b7 editable</div>
+        <div contenteditable="true" style="font-family:${th.logo};font-size:24px;color:${th.accent};">&lt;&lt;Logo&gt;&gt;</div>
+        <div contenteditable="true" style="font-family:${th.body};font-size:30px;color:#111;margin-top:12px;font-weight:700;">&lt;&lt;Phone&gt;&gt;</div>
+        <div contenteditable="true" style="font-size:12px;color:#555;margin-top:8px;">Re: &lt;&lt;PropertyAddress&gt;&gt; &nbsp;\u00b7&nbsp; &lt;&lt;Website&gt;&gt;</div>
+      </div>`;
+  }
+
+  return `
+  <div class="page" style="${pageStyle}">
+    <div class="plabel">Inside \u2014 letter + tear-off (page 2)</div>
+    ${marginLine}
+    ${headerHTML(t, th)}
+    <div class="i-body ed-z z" style="font-family:${th.body};${bodyExtra}">
+      <div class="badge ed">Letter body \u00b7 editable</div>
+      <div class="i-greet" contenteditable="true" style="font-size:${sizes.greet};">${t.inside.greet}</div>
+      <p contenteditable="true" style="font-weight:600;">${t.inside.lead}</p>
+      ${bodyParas}
+      ${bulletsHTML(t, th)}
+      ${closeParas}
+      ${signoff}
+    </div>
+    ${lower}
+  </div>`;
+}
+
+function drawNoise(cv){
+  const ctx=cv.getContext('2d'); const w=cv.width,h=cv.height; const c=8;
+  let s=987654321; const rnd=()=>{s=(s*1103515245+12345)&0x7fffffff;return s/0x7fffffff;};
+  ctx.clearRect(0,0,w,h);
+  for(let y=0;y<h;y+=c){for(let x=0;x<w;x+=c){const r=rnd();
+    if(r>0.5){ctx.fillStyle=r>0.8?'#111':(r>0.66?'#000':'#666');ctx.fillRect(x,y,c-0.5,c-0.5);}}}
+}
+function drawIMB(el){
+  let s=42; const rnd=()=>{s=(s*1103515245+12345)&0x7fffffff;return s/0x7fffffff;};
+  let html='';
+  for(let i=0;i<65;i++){const t=rnd(); let hh,mt;
+    if(t<0.25){hh=22;mt=0;} else if(t<0.5){hh=11;mt=0;} else if(t<0.75){hh=11;mt=11;} else {hh=22;mt=0;}
+    html+=`<i style="height:${hh}px;margin-top:${mt}px;"></i>`;}
+  el.innerHTML=html;
+}
+
+let cur=0, view='both';
+const scaler=document.getElementById('scaler');
+function render(){
+  const t=TEMPLATES[cur]; let html='';
+  if(view==='outside') html=`<div class="pwrap">${outsideHTML(t)}</div>`;
+  else if(view==='inside') html=`<div class="pwrap">${insideHTML(t)}</div>`;
+  else html=`<div class="pwrap">${outsideHTML(t)}</div><div class="pwrap">${insideHTML(t)}</div>`;
+  scaler.innerHTML=html;
+  scaler.querySelectorAll('[data-noise]').forEach(drawNoise);
+  scaler.querySelectorAll('[data-imb]').forEach(drawIMB);
+}
+function buildList(){
+  const list=document.getElementById('tlist');
+  list.innerHTML=TEMPLATES.map((t,i)=>{const th=THEMES[t.theme];return `
+    <button class="titem ${i===0?'on':''}" data-i="${i}">
+      <span class="tn"><span class="sw2" style="background:${th.accent};"></span>${i+1}. ${t.name}</span>
+      <span class="tc">${t.concept}${t.hasCheck?' \u00b7 sample cheque':''}</span>
+    </button>`;}).join('');
+  list.querySelectorAll('.titem').forEach(b=>b.onclick=()=>{
+    cur=+b.dataset.i;
+    list.querySelectorAll('.titem').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); render();
+  });
+}
+function setZoom(v){scaler.style.transform=`scale(${v/100})`;document.getElementById('zoomv').textContent=v+'%';}
+document.getElementById('viewSeg').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return; view=b.dataset.v;
+  document.querySelectorAll('#viewSeg button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); render();
+});
+document.getElementById('zoom').addEventListener('input',e=>setZoom(e.target.value));
+document.getElementById('guides').addEventListener('change',e=>document.body.classList.toggle('guides',e.target.checked));
+document.getElementById('printBtn').addEventListener('click',()=>window.print());
+buildList(); render(); setZoom(70);
+</script>
+</body>
+</html>
