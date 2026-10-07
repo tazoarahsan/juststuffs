@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pricing Page New Lead Workflow — Email Viewer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f5f5;--panel:#ffffff;--ink:#13231f;--muted:#5d6b6b;--line:#dde3e3;
+  --teal:#008088;--teal-ink:#006a71;--teal-soft:#e3f1f1;--canvas:#e4eaea;--warn:#a5520c;--warn-soft:#fbefe2;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1717;--panel:#162121;--ink:#e6eeed;--muted:#94a4a3;--line:#26353a;
+    --teal:#2bb3b9;--teal-ink:#5cc9ce;--teal-soft:#183334;--canvas:#1c2828;--warn:#f0a360;--warn-soft:#33251a;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1717;--panel:#162121;--ink:#e6eeed;--muted:#94a4a3;--line:#26353a;
+  --teal:#2bb3b9;--teal-ink:#5cc9ce;--teal-soft:#183334;--canvas:#1c2828;--warn:#f0a360;--warn-soft:#33251a;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Manrope,"Segoe UI",system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.5;min-height:100%}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+
+.app{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100vh}
+.rail{background:var(--panel);border-right:1px solid var(--line);padding:24px 18px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.rail h1{font-size:17px;line-height:1.3;margin:0;font-weight:800;letter-spacing:-.01em}
+.rail .sub{margin:4px 0 0;color:var(--muted);font-size:13px}
+
+.timeline{list-style:none;margin:0;padding:0;position:relative}
+.group-label{font-size:12px;font-weight:700;color:var(--muted);margin:14px 0 6px 30px}
+.group-label:first-child{margin-top:0}
+.t-item{position:relative;padding-left:30px}
+.t-item::before{content:"";position:absolute;left:9px;top:0;bottom:0;width:2px;background:var(--line)}
+.t-item.burst::before{background:var(--teal)}
+.t-item.first::before{top:18px}
+.t-item.last::before{bottom:calc(100% - 18px)}
+.t-dot{position:absolute;left:4px;top:13px;width:12px;height:12px;border-radius:50%;background:var(--panel);border:2px solid var(--muted)}
+.t-item.burst .t-dot{border-color:var(--teal)}
+.t-btn{display:block;width:100%;text-align:left;background:none;border:1px solid transparent;border-radius:10px;padding:8px 10px;cursor:pointer}
+.t-btn:hover{background:var(--bg)}
+.t-btn[aria-current="true"]{background:var(--teal-soft);border-color:var(--teal)}
+.t-item:has(.t-btn[aria-current="true"]) .t-dot{background:var(--teal);border-color:var(--teal)}
+.t-name{font-weight:700;font-size:14px;display:flex;justify-content:space-between;gap:8px}
+.t-when{font-weight:500;color:var(--muted);font-size:12px;white-space:nowrap}
+.t-subj{font-size:12.5px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:2px}
+
+details.links{border-top:1px solid var(--line);padding-top:16px}
+details.links summary{cursor:pointer;font-weight:700;font-size:14px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details.links summary::-webkit-details-marker{display:none}
+.badge{font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;background:var(--warn-soft);color:var(--warn)}
+.badge.ok{background:var(--teal-soft);color:var(--teal-ink)}
+.links p{font-size:12.5px;color:var(--muted);margin:10px 0 12px}
+.field{margin-bottom:10px}
+.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:3px}
+.field input{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font-size:13px}
+.field input:focus{border-color:var(--teal);outline:none;box-shadow:0 0 0 3px var(--teal-soft)}
+
+.main{padding:28px 32px 48px;min-width:0}
+.meta{max-width:900px}
+.meta h2{font-size:24px;line-height:1.25;margin:0 0 8px;font-weight:800;letter-spacing:-.015em}
+.meta dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0 0 18px;font-size:14px}
+.meta dt{color:var(--muted);font-weight:600}
+.meta dd{margin:0}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px;max-width:900px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel)}
+.seg button{border:0;background:none;padding:8px 14px;cursor:pointer;font-weight:600;font-size:13.5px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--teal);color:#fff}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:700;font-size:13.5px}
+.btn:hover{border-color:var(--teal)}
+.btn.primary{background:var(--teal);border-color:var(--teal);color:#fff}
+.btn.primary:hover{background:var(--teal-ink)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.spacer{flex:1}
+
+.canvas{background:var(--canvas);border-radius:16px;padding:24px 12px;display:flex;justify-content:center;overflow-x:auto}
+.frame-wrap{transition:width .25s ease;width:648px;max-width:100%}
+.frame-wrap.mobile{width:390px}
+iframe{display:block;width:100%;border:0;height:900px;background:#eef1f1;border-radius:10px}
+
+.code-panel{margin-top:16px;display:none}
+.code-panel.open{display:block}
+.code-panel textarea{width:100%;height:320px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;line-height:1.5;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);resize:vertical}
+
+.note{font-size:12.5px;color:var(--muted);margin:12px 0 0;max-width:900px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--panel);padding:10px 16px;border-radius:10px;font-weight:600;font-size:13.5px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .rail{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .timeline{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+  .group-label,.t-item::before,.t-dot{display:none}
+  .t-item{padding-left:0;flex:0 0 190px}
+  .t-btn{border-color:var(--line);height:100%}
+  .main{padding:20px 16px 40px}
+  .meta h2{font-size:20px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <div>
+      <h1>Pricing Page New Lead Workflow</h1>
+      <p class="sub">7 emails from REsimpli Support</p>
+    </div>
+    <ol class="timeline" id="timeline" aria-label="Emails in send order"></ol>
+    <details class="links" id="linksBox">
+      <summary>Link URLs <span class="badge" id="linkBadge"></span></summary>
+      <p>Paste each URL once. Copied HTML uses them in every email. Empty links copy as #REPLACE-… so they're easy to find.</p>
+      <div id="fields"></div>
+    </details>
+  </aside>
+
+  <main class="main">
+    <div class="meta">
+      <h2 id="subject"></h2>
+      <dl>
+        <dt>Preview text</dt><dd id="preview"></dd>
+        <dt>Sends</dt><dd id="when"></dd>
+        <dt>From</dt><dd>REsimpli Support</dd>
+      </dl>
+    </div>
+    <div class="toolbar">
+      <div class="seg" role="group" aria-label="Preview width">
+        <button id="desk" aria-pressed="true">Desktop</button>
+        <button id="mob" aria-pressed="false">Mobile</button>
+      </div>
+      <button class="btn primary" id="copyBtn">Copy HTML</button>
+      <button class="btn" id="codeBtn" aria-expanded="false">Show HTML</button>
+      <span class="spacer"></span>
+      <button class="btn" id="prevBtn" aria-label="Previous email">Previous</button>
+      <button class="btn" id="nextBtn" aria-label="Next email">Next</button>
+    </div>
+    <div class="canvas">
+      <div class="frame-wrap" id="frameWrap">
+        <iframe id="frame" title="Email preview"></iframe>
+      </div>
+    </div>
+    <div class="code-panel" id="codePanel">
+      <textarea id="codeArea" readonly aria-label="Email HTML"></textarea>
+    </div>
+    <p class="note">The logo and video thumbnail show as placeholders here because this viewer can't load outside images. The copied HTML uses the real image URLs. Hover a link in the preview to see where it points.</p>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+/* ---------- links ---------- */
+var LINKS=[
+  {k:'signup',label:'Signup resume link'},
+  {k:'demo',label:'Book a demo'},
+  {k:'pricing',label:'Pricing page'},
+  {k:'testimonials',label:'Testimonials page'},
+  {k:'billy',label:'Billy case study'},
+  {k:'features',label:'Features page'},
+  {k:'academy',label:'REsimpli Academy'}
+];
+var urls={};
+try{urls=JSON.parse(localStorage.getItem('pp-email-links')||'{}')||{}}catch(e){urls={}}
+function saveUrls(){try{localStorage.setItem('pp-email-links',JSON.stringify(urls))}catch(e){}}
+
+/* ---------- email building blocks (match the GHL template) ---------- */
+var LOGO='https://assets.cdn.filesafe.space/9wcAS15uBjwsqQtW2zpi/media/6712a9a1e25a4cd1a8af8a29.jpeg';
+var YT='https://www.youtube.com/watch?v=S0HXa4VJkvY';
+var THUMB='https://img.youtube.com/vi/S0HXa4VJkvY/hqdefault.jpg';
+var F="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;";
+var TXT=F+"font-size:16px;line-height:25px;color:#3c4a4a;";
+var GREET='<p style="margin:0 0 16px 0;color:#13231f;">Hey {{default contact.first_name "there"}},</p>';
+
+function row(html,pad){return '<tr><td class="px" style="'+TXT+'padding:'+(pad||'4px 40px 6px 40px')+';">'+html+'</td></tr>'}
+function p(h){return '<p style="margin:0 0 16px 0;">'+h+'</p>'}
+function s(t){return '<strong style="color:#13231f;">'+t+'</strong>'}
+var RE='<a href="https://resimpli.com" target="_blank" style="color:#008088;text-decoration:underline;">REsimpli</a>';
+function a(text,href,key){return '<a href="'+href+'"'+(key?' data-link="'+key+'"':'')+' target="_blank" style="color:#008088;font-weight:700;text-decoration:underline;">'+text+'</a>'}
+function list(items,check){
+  return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px 0;">'+items.map(function(t){
+    return '<tr><td valign="top" style="'+TXT+'width:28px;padding:0 0 8px 0;'+(check?'':'color:#008088;font-weight:700;')+'">'+(check?'&#9989;':'&#8226;')+'</td><td valign="top" style="'+TXT+'padding:0 0 8px 0;">'+t+'</td></tr>';
+  }).join('')+'</table>';
+}
+function quote(q,who){
+  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 14px 0;"><tr><td style="background:#f2f7f7;border-left:4px solid #008088;border-radius:6px;padding:16px 18px;'+F+'font-size:15px;line-height:23px;color:#13231f;">&ldquo;'+q+'&rdquo;<br><span style="display:inline-block;margin-top:8px;font-size:13px;line-height:18px;font-weight:700;color:#008088;">'+who+'</span></td></tr></table>';
+}
+function code(c,note){
+  return '<tr><td align="center" class="px" style="padding:8px 40px 18px 40px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;"><tr><td align="center" style="border:2px dashed #008088;border-radius:10px;background:#f2f7f7;padding:14px 28px;'+F+'"><div style="font-size:12px;line-height:16px;color:#5d6b6b;margin:0 0 4px 0;">Use code</div><div style="font-size:26px;line-height:32px;font-weight:800;letter-spacing:2px;color:#13231f;">'+c+'</div><div style="font-size:13px;line-height:19px;color:#3c4a4a;margin-top:6px;">'+note+'</div></td></tr></table></td></tr>';
+}
+function btn(label,href,key){
+  var w=Math.min(440,Math.round(label.length*9.2+80));
+  return '<tr><td align="center" class="px" style="padding:6px 40px 26px 40px;"><!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="'+href+'" style="height:50px;v-text-anchor:middle;width:'+w+'px;" arcsize="16%" stroke="f" fillcolor="#008088"><w:anchorlock/><center style="color:#ffffff;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">'+label+'</center></v:roundrect><![endif]--><!--[if !mso]><!--><a href="'+href+'"'+(key?' data-link="'+key+'"':'')+' target="_blank" style="display:inline-block;background:#008088;color:#ffffff;'+F+'font-size:16px;font-weight:700;line-height:20px;padding:15px 34px;border-radius:8px;text-decoration:none;">'+label+'</a><!--<![endif]--></td></tr>';
+}
+function sign(ps){
+  var out=row('<p style="margin:0;">Thanks,<br>'+s('The REsimpli Team')+'</p>',ps?'14px 40px 18px 40px':'14px 40px 34px 40px');
+  if(ps) out+=row('<p style="margin:0;font-size:15px;line-height:23px;color:#5d6b6b;">'+ps+'</p>','0 40px 34px 40px');
+  return out;
+}
+function thumb(){
+  return '<tr><td class="px" style="padding:0 40px 20px 40px;"><a href="'+YT+'" target="_blank"><img src="'+THUMB+'" alt="Watch Steve Stimson\'s story" width="520" style="display:block;width:100%;max-width:520px;height:auto;border:0;border-radius:8px;"></a></td></tr>';
+}
+function shell(subject,preview,rows){
+  return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<meta http-equiv="X-UA-Compatible" content="IE=edge">\n<title>'+subject+'</title>\n<style>\n@media only screen and (max-width:620px){\n.email-container{width:100%!important}\n.px{padding-left:24px!important;padding-right:24px!important}\n}\n</style>\n</head>\n<body style="margin:0;padding:0;background:#eef1f1;'+F+'">\n'+
+  '<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#eef1f1;opacity:0;">'+preview+'&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;</div>\n'+
+  '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0;padding:0;background:#eef1f1;"><tr><td align="center" style="padding:24px 12px;"><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" class="email-container" style="width:100%;max-width:600px;background:#ffffff;border-radius:14px;overflow:hidden;">'+
+  '<tr><td align="center" class="px" style="padding:30px 40px 6px 40px;"><img src="'+LOGO+'" alt="REsimpli" height="48" style="height:48px;width:auto;display:inline-block;border:0;margin:0;"></td></tr>'+
+  rows+
+  '<tr><td align="center" class="px" style="padding:26px 40px 34px 40px;background:#ffffff;'+F+'text-align:center;"><p style="margin:0;font-size:12px;line-height:18px;color:#9aa7a7;text-align:center;"><a href="{{email.unsubscribe_link}}" style="color:#9aa7a7;text-decoration:underline;mso-style-textfill-fill-color:#9aa7a7;"><!--[if mso]><font color="#9aa7a7"><![endif]-->Unsubscribe<!--[if mso]></font><![endif]--></a>&nbsp;&middot;&nbsp;{{location.full_address}}</p></td></tr>'+
+  '</table></td></tr></table>\n</body>\n</html>';
+}
+
+/* ---------- the seven emails ---------- */
+var EMAILS=[
+{name:'Email 1',when:'Day 1, 15 min after trigger',short:'15 min',burst:true,
+ subject:'[ACTION REQUIRED] Complete your signup within 6 hrs for 50% OFF',
+ preview:'You were one step away, so we saved your spot.',
+ rows:function(L){return row(GREET+p('You were just one step away from activating your '+RE+' account, so we saved your spot. Complete your signup within the next 6 hours and get '+s('50% OFF your first month')+' with code '+s('STARTNOW')+'. This discount is valid for '+s('6 hours only')+', so don\'t wait.'),'32px 40px 6px 40px')
+  +code('STARTNOW','50% OFF your first month. Valid for 6 hours only.')
+  +btn('Complete My Setup',L('signup'),'signup')
+  +row(p('Once you\'re in, you\'ll unlock:')+list([s('Unlimited calling, texting, email, and e-sign')+' on '+a('every plan',L('pricing'),'pricing'),'FREE skip tracing and list stacking in one place','Follow-ups, marketing, and deals, all inside one CRM'])+p('Want to see it first? '+a('Book a free demo',L('demo'),'demo')+'.'))
+  +sign('P.S. Another quick email is on its way in a couple of minutes.');}},
+{name:'Email 2',when:'Day 1, 2 min after Email 1',short:'+2 min',burst:true,
+ subject:'[ACTION REQUIRED] See what investors are saying about REsimpli 💬',
+ preview:'Your 50% OFF code is valid for 6 hours only, and it\'s still active.',
+ rows:function(L){return row(GREET+p('Before you finish signing up for '+RE+', we wanted you to hear from investors who use it every day:'),'32px 40px 6px 40px')
+  +row(quote('REsimpli has been a game-changer, helping me close countless deals&mdash;wholesales, flips, rentals&mdash;since 2019!','Ryan Dossey')
+   +quote('REsimpli saves me money by replacing multiple tools. I ditched CallRail and QuickBooks and saved $300 just on QuickBooks alone.','Michael Pinter')
+   +quote('The support at REsimpli is unmatched. Sharad and the team listen and implement feedback fast. We went from 1&ndash;2 deals to 4&ndash;6.','Alex Smades')
+   +p(a('See all testimonials',L('testimonials'),'testimonials')))
+  +code('STARTNOW','&#9203; 50% OFF your first month. Valid for 6 hours only,<br>so it\'s still active for a few more hours.')
+  +btn('Complete My Setup',L('signup'),'signup')
+  +sign('P.S. One more email is on its way shortly with a real case study of an investor closing 30+ deals a month. Prefer to talk to someone? '+a('Book a free demo',L('demo'),'demo')+'.');}},
+{name:'Email 3',when:'Day 1, 2 min after Email 2',short:'+2 min',burst:true,
+ subject:'[ACTION REQUIRED] Why Billy closes 30+ deals/month with REsimpli',
+ preview:'He was juggling four tools and still losing leads.',
+ rows:function(L){return row(GREET+p('Last email for today, and it\'s worth 60 seconds. Billy Fernandes runs a wholesale, flip, and buy-and-hold operation out of Dallas&ndash;Fort Worth. He was juggling four different tools and still losing leads, so he moved everything into '+RE+'. Here\'s where he landed:')
+   +list(['30+ deals closed per month, consistently','His team actually uses the pipeline, because it\'s simple','Lead prioritization, so the best opportunities surface first','KPI dashboards that help him make smarter decisions faster'])
+   +quote('I wish I\'d switched sooner.','Billy Fernandes')
+   +p(a('Read his full case study',L('billy'),'billy')),'32px 40px 6px 40px')
+  +code('STARTNOW','50% OFF your first month. Valid for 6 hours only,<br>and it expires in a few hours.')
+  +btn('Finish Signing Up &mdash; Claim Your Discount',L('signup'),'signup')
+  +sign('P.S. If your setup looks like Billy\'s did, '+a('his case study',L('billy'),'billy')+' shows exactly how he consolidated. You can also '+a('book a free demo',L('demo'),'demo')+' and we\'ll walk you through it.');}},
+{name:'Email 4',when:'Day 2',short:'Day 2',
+ subject:'Why top investors don\'t use 5 tools (they use REsimpli)',
+ preview:'One login, one subscription, unlimited calling and texting.',
+ rows:function(L){return row(GREET+p('We get it, adding another tool to your business can feel like a commitment. The difference is that '+RE+' replaces the tools you\'re already paying for:')
+   +list(['CRM with Custom Pipelines &amp; Stages','Automations','Triple Line Dialer','List stacking','Skip tracing','Websites and direct mail','Unlimited calling, texting, email, and e-sign'],true)
+   +p('One login, one subscription, no juggling, and no per-minute or per-text bills on top. You can '+a('see everything that\'s included',L('features'),'features')+' or '+a('compare plans',L('pricing'),'pricing')+'.'),'32px 40px 6px 40px')
+  +btn('Book a Free Demo',L('demo'),'demo')
+  +row(p('REsimpli was built by real investors who got tired of the chaos, so you don\'t have to piece it together yourself.'))
+  +sign('P.S. Ready to skip the demo? '+a('Finish signing up',L('signup'),'signup')+' and start your free trial.');}},
+{name:'Email 5',when:'Day 3',short:'Day 3',
+ subject:'See how Steve closed 50 deals last year using REsimpli',
+ preview:'He went from 15 deals to 50 in one year. Here\'s how.',
+ rows:function(L){return row(GREET+p('Meet Steve Stimson, a real estate investor who went from 15 to 50 deals in one year using '+RE+'. He automated his follow-ups, managed his entire pipeline in one place, and stopped losing leads. You can too.')
+   +p(a('Watch how he did it',YT)),'32px 40px 6px 40px')
+  +thumb()
+  +row(p('Follow-up is where most deals are won or lost, and with '+a('unlimited calling, texting, and email on every plan',L('pricing'),'pricing')+', you can follow up with every lead as often as it takes without watching a usage meter.')
+   +p('Book a free demo and see first-hand how REsimpli can transform your business:'))
+  +btn('Book a Demo',L('demo'),'demo')
+  +sign('P.S. '+a('Finish signing up',L('signup'),'signup')+' whenever you\'re ready. Your spot is still saved.');}},
+{name:'Email 6',when:'Day 5',short:'Day 5',
+ subject:'Still thinking it over? Let\'s make it easy.',
+ preview:'Your free trial is still waiting.',
+ rows:function(L){return row(GREET+p('We noticed you haven\'t completed your signup yet, and that\'s okay! Your free trial is still waiting, and you can cancel anytime.')
+   +p('Here\'s what you\'ll get once you finish signing up:')
+   +list(['Full access to the '+RE+' CRM','Unlimited calling, texting, email, and e-sign','FREE skip tracing and list stacking','Automations, the Triple Line Dialer, and Custom Pipelines &amp; Stages']),'32px 40px 6px 40px')
+  +btn('Finish My Signup',L('signup'),'signup')
+  +row(p('Prefer to see it first? '+a('Book a free demo',L('demo'),'demo')+' with an actual real estate investor and see first-hand how REsimpli can work for your business. You\'ve got nothing to lose, and more deals to gain.'))
+  +sign('P.S. Want to hear from other investors first? '+a('Read their reviews here',L('testimonials'),'testimonials')+'.');}},
+{name:'Email 7',when:'Day 7',short:'Day 7',
+ subject:'Final reminder: your REsimpli signup is still waiting',
+ preview:'This is the last reminder we\'ll send.',
+ rows:function(L){return row(GREET+p('Your '+RE+' signup is still waiting to be activated, and this is the last reminder we\'ll send. Once you finish, you\'ll:')
+   +list(['Get free skip tracing credits','Make unlimited calls and texts, and send unlimited emails and e-signs','Manage leads, marketing, and accounting in one place'],true),'32px 40px 6px 40px')
+  +btn('Complete My Signup',L('signup'),'signup')
+  +row(p('If you\'re still on the fence, '+a('book a free demo',L('demo'),'demo')+' with an actual real estate investor and see how REsimpli can transform your business. In the meantime, the '+a('REsimpli Academy',L('academy'),'academy')+' has free training you can watch either way.'))
+  +sign(null);}}
+];
+
+function buildHTML(i,forCopy){
+  var e=EMAILS[i];
+  var L=function(k){var u=(urls[k]||'').trim();return u?u:(forCopy?'#REPLACE-'+k:'#')};
+  var html=shell(e.subject,e.preview,e.rows(L));
+  if(forCopy) html=html.replace(/ data-link="[a-z]+"/g,'');
+  return html;
+}
+function missingFor(i){
+  var html=buildHTML(i,true);var m=html.match(/#REPLACE-[a-z]+/g)||[];
+  return m.filter(function(v,ix){return m.indexOf(v)===ix}).map(function(v){var k=v.slice(9);return LINKS.filter(function(l){return l.k===k})[0].label});
+}
+
+/* preview-only image placeholders (outside images can't load in this viewer) */
+var LOGO_PH='data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="190" height="48" viewBox="0 0 190 48"><rect width="190" height="48" rx="8" fill="#e3f1f1"/><text x="95" y="31" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="20" font-weight="700" fill="#008088">REsimpli logo</text></svg>');
+var THUMB_PH='data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="520" height="292" viewBox="0 0 520 292"><rect width="520" height="292" rx="8" fill="#1f2d2d"/><circle cx="260" cy="132" r="34" fill="#008088"/><path d="M250 114 L250 150 L280 132 Z" fill="#fff"/><text x="260" y="210" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="17" fill="#cfe3e3">Video thumbnail: Steve Stimson</text></svg>');
+
+/* ---------- UI ---------- */
+var cur=0;
+try{var saved=parseInt(localStorage.getItem('pp-email-cur'),10);if(saved>=0&&saved<EMAILS.length)cur=saved}catch(e){}
+var $=function(id){return document.getElementById(id)};
+var frame=$('frame'),wrap=$('frameWrap');
+
+function renderTimeline(){
+  var tl=$('timeline');tl.innerHTML='';
+  var lbl1=document.createElement('li');lbl1.className='group-label';lbl1.textContent='Day 1, sent 2 minutes apart';tl.appendChild(lbl1);
+  EMAILS.forEach(function(e,i){
+    if(i===3){var l=document.createElement('li');l.className='group-label';l.textContent='Follow-ups';tl.appendChild(l)}
+    var li=document.createElement('li');
+    li.className='t-item'+(e.burst?' burst':'')+(i===0||i===3?' first':'')+(i===2||i===6?' last':'');
+    li.innerHTML='<span class="t-dot" aria-hidden="true"></span><button class="t-btn" data-i="'+i+'"><span class="t-name">'+e.name+'<span class="t-when">'+e.short+'</span></span><span class="t-subj"></span></button>';
+    li.querySelector('.t-subj').textContent=e.subject;
+    tl.appendChild(li);
+  });
+  tl.querySelectorAll('.t-btn').forEach(function(b){b.addEventListener('click',function(){show(+b.dataset.i)})});
+}
+function renderFields(){
+  var box=$('fields');box.innerHTML='';
+  LINKS.forEach(function(l){
+    var d=document.createElement('div');d.className='field';
+    d.innerHTML='<label for="f-'+l.k+'">'+l.label+'</label><input id="f-'+l.k+'" type="url" placeholder="https://" autocomplete="off">';
+    var inp=d.querySelector('input');inp.value=urls[l.k]||'';
+    inp.addEventListener('input',function(){urls[l.k]=inp.value;saveUrls();updateBadge();refresh(true)});
+    box.appendChild(d);
+  });
+  updateBadge();
+}
+function updateBadge(){
+  var set=LINKS.filter(function(l){return (urls[l.k]||'').trim()}).length;
+  var b=$('linkBadge');b.textContent=set+' of '+LINKS.length+' set';b.classList.toggle('ok',set===LINKS.length);
+}
+function refresh(keepScroll){
+  var e=EMAILS[cur];
+  var html=buildHTML(cur,false).split(LOGO).join(LOGO_PH).split(THUMB).join(THUMB_PH);
+  frame.onload=function(){
+    try{
+      var doc=frame.contentDocument;
+      doc.querySelectorAll('a').forEach(function(an){
+        var k=an.getAttribute('data-link');
+        if(k){var u=(urls[k]||'').trim();var lab=LINKS.filter(function(l){return l.k===k})[0].label;an.title=u?lab+': '+u:lab+' (URL not set yet)'}
+        else an.title=an.getAttribute('href');
+      });
+      doc.addEventListener('click',function(ev){if(ev.target.closest('a'))ev.preventDefault()});
+      frame.style.height=(doc.documentElement.scrollHeight+4)+'px';
+    }catch(err){}
+  };
+  frame.srcdoc=html;
+  if($('codePanel').classList.contains('open')) $('codeArea').value=buildHTML(cur,true);
+}
+function show(i){
+  cur=i;try{localStorage.setItem('pp-email-cur',String(i))}catch(e){}
+  var e=EMAILS[i];
+  $('subject').textContent=e.subject;$('preview').textContent=e.preview;$('when').textContent=e.when;
+  document.querySelectorAll('.t-btn').forEach(function(b){b.setAttribute('aria-current',String(+b.dataset.i===i))});
+  $('prevBtn').disabled=i===0;$('nextBtn').disabled=i===EMAILS.length-1;
+  refresh();
+}
+function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove('show')},3200)}
+
+function copyText(text){
+  if(navigator.clipboard&&navigator.clipboard.writeText){return navigator.clipboard.writeText(text).catch(function(){return fallback(text)})}
+  return fallback(text);
+}
+function fallback(text){
+  return new Promise(function(res,rej){
+    var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+    var ok=false;try{ok=document.execCommand('copy')}catch(e){}
+    document.body.removeChild(ta);ok?res():rej();
+  });
+}
+$('copyBtn').addEventListener('click',function(){
+  var html=buildHTML(cur,true),miss=missingFor(cur);
+  copyText(html).then(function(){
+    toast(miss.length?'Copied '+EMAILS[cur].name+'. Still needs URLs: '+miss.join(', ')+'.':'Copied '+EMAILS[cur].name+' HTML.');
+  },function(){
+    openCode();$('codeArea').focus();$('codeArea').select();toast('Copy was blocked. The HTML is selected below, press Ctrl+C or Cmd+C.');
+  });
+});
+function openCode(){$('codePanel').classList.add('open');$('codeBtn').setAttribute('aria-expanded','true');$('codeBtn').textContent='Hide HTML';$('codeArea').value=buildHTML(cur,true)}
+$('codeBtn').addEventListener('click',function(){
+  if($('codePanel').classList.contains('open')){$('codePanel').classList.remove('open');$('codeBtn').setAttribute('aria-expanded','false');$('codeBtn').textContent='Show HTML'}
+  else openCode();
+});
+$('desk').addEventListener('click',function(){wrap.classList.remove('mobile');$('desk').setAttribute('aria-pressed','true');$('mob').setAttribute('aria-pressed','false');setTimeout(refresh,260)});
+$('mob').addEventListener('click',function(){wrap.classList.add('mobile');$('mob').setAttribute('aria-pressed','true');$('desk').setAttribute('aria-pressed','false');setTimeout(refresh,260)});
+$('prevBtn').addEventListener('click',function(){if(cur>0)show(cur-1)});
+$('nextBtn').addEventListener('click',function(){if(cur<EMAILS.length-1)show(cur+1)});
+document.addEventListener('keydown',function(e){
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+  if(e.key==='ArrowRight'&&cur<EMAILS.length-1)show(cur+1);
+  if(e.key==='ArrowLeft'&&cur>0)show(cur-1);
+});
+
+renderTimeline();renderFields();show(cur);
+})();
+</script>
+</body>
+</html>
