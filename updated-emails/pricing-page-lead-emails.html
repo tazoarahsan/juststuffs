@@ -151,7 +151,7 @@ iframe{display:block;width:100%;border:0;height:900px;background:#eef1f1;border-
     <div class="code-panel" id="codePanel">
       <textarea id="codeArea" readonly aria-label="Email HTML"></textarea>
     </div>
-    <p class="note">The logo and video thumbnail show as placeholders here because this viewer can't load outside images. The copied HTML uses the real image URLs. Hover a link in the preview to see where it points.</p>
+    <p class="note">Gmail and Outlook don't display SVG logos, so the copied HTML needs a hosted PNG. Upload resimpli-logo-email.png to GHL Media, then paste its URL into Logo image URL. Until you do, the logo copies as #REPLACE-logo. The video thumbnail shows as a placeholder here, but the copied HTML uses the real YouTube image. Hover a link in the preview to see where it points.</p>
   </main>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -160,6 +160,7 @@ iframe{display:block;width:100%;border:0;height:900px;background:#eef1f1;border-
 (function(){
 /* ---------- links ---------- */
 var LINKS=[
+  {k:'logo',label:'Logo image URL (PNG)'},
   {k:'signup',label:'Signup resume link'},
   {k:'demo',label:'Book a demo'},
   {k:'pricing',label:'Pricing page'},
@@ -173,7 +174,7 @@ try{urls=JSON.parse(localStorage.getItem('pp-email-links')||'{}')||{}}catch(e){u
 function saveUrls(){try{localStorage.setItem('pp-email-links',JSON.stringify(urls))}catch(e){}}
 
 /* ---------- email building blocks (match the GHL template) ---------- */
-var LOGO='https://assets.cdn.filesafe.space/9wcAS15uBjwsqQtW2zpi/media/6712a9a1e25a4cd1a8af8a29.jpeg';
+var LOGO_SVG='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTE5IiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTE5IDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8ZyBjbGlwLXBhdGg9InVybCgjY2xpcDBfMjI3XzIwNTYpIj4KPHBhdGggZD0iTTI3LjU2NzEgMTEuMzM4OEMyNi44NjMgMTAuODU2IDIwLjMyNjIgNi4wMjUyMiAxNy4xNDU4IDMuNjcwMkMxNC4xMTggNS45MDY4OCA3LjkwNzU1IDEwLjQ5MzggNy4yODc4OCAxMC45NDgzQzYuNTEzMzMgMTEuNTE2MyA1LjYzMzE1IDExLjk0MjMgNC41MDY1MyAxMS45Nzc5QzMuMzc5OTEgMTIuMDEzNCAyLjIxODA4IDExLjk3NzkgMS42MTk1NSAxMS45Nzc5QzEuMDIxMDQgMTEuOTc3OSAwLjkxNTQxNyAxMS4zMDMzIDEuNDA4MzIgMTAuOTEyOEMxLjkwMTIxIDEwLjUyMjMgMTQuMTUzMyAxLjUwNDUyIDE1LjQyMDcgMC42MTY5NTJDMTYuNjg4MiAtMC4yNzA2MTkgMTcuOTU1NiAtMC4wNTc2MDE5IDE4LjU1NDEgMC4zNjg0MzJDMTkuMTUyNiAwLjc5NDQ2OCAzMi42MDE3IDEwLjY5OTggMzIuOTg5IDEwLjk4MzhDMzMuMzc2MiAxMS4yNjc4IDMzLjMwNTggMTEuOTc3OSAzMi42MTY3IDExLjk3NzlIMzAuMTM3MkMyOS4zOTc4IDExLjk3NzkgMjguNDQ3MyAxMS45NDIzIDI3LjU2NzEgMTEuMzM4OFoiIGZpbGw9IiMwMDgwODgiLz4KPHBhdGggZD0iTTE2LjA1NDQgMTguNTEwNlYxNS4yNzk4SDMuMTY4NjNDMC45MTUzNzkgMTUuMjc5OCAwIDE3LjMwMzUgMCAxOC40Mzk2VjI4LjA5NjRDMCAzMC43Mzc4IDIuMTEyNDIgMzEuNDY5MSAzLjE2ODYzIDMxLjUwNDZWMTguNTEwNkgxNi4wNTQ0WiIgZmlsbD0iIzAwODA4OCIvPgo8cGF0aCBkPSJNMzQuMjkxOSAxOC41MTAzSDE4LjE2NzFDMTguMTY3MSAxNi43NzA3IDE5LjU0MDEgMTUuMjQ0MSAyMS4zMDA1IDE1LjI0NDFIMzQuMjkxOVYxOC41MTAzWiIgZmlsbD0iIzAwODA4OCIvPgo8cGF0aCBkPSJNMTguMTY3MSAyNS4wMDc0VjIxLjc3NjZIMzQuMjkxOVYyNS4wMDc0SDE4LjE2NzFaIiBmaWxsPSIjMDA4MDg4Ii8+CjxwYXRoIGQ9Ik0zNC4yOTE5IDMxLjUwNFYyOC4yMzc4SDE4LjE2NzFDMTguMTY3MSAyOS41ODY5IDE5LjExNzYgMzEuNTA0IDIxLjQ4MzYgMzEuNTA0SDM0LjI5MTlaIiBmaWxsPSIjMDA4MDg4Ii8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNTYuODk0IDguNzQ3MUM1NS4yODg2IDguNzQ3MSA1NC44NjM4IDEwLjE0MzYgNTQuODUyIDEwLjg0MTdDNTQuODYzOCAxMS40NjkgNTUuMjg4NiAxMi43MjM0IDU2Ljg5NCAxMi43MjM0QzU4LjQ5OTUgMTIuNzIzNCA1OC44Nzc0IDExLjM3NDMgNTguODY1NiAxMC42OTk4QzU4LjgzMDQgMTAuMTA4MSA1OC4zODY4IDguODg5MTQgNTYuODk0IDguNzQ3MVpNNTEuNDM2OSAxNi42NjQyTDUwLjM4MDggMTkuMzk4QzQ5LjE0ODUgMTguNjE2OSA0Ny40OTM4IDE4LjE5MDkgNDUuOTQ0NyAxOC4wNDg4QzQ0LjM5NTUgMTcuOTA2OCA0Mi4yODMxIDE4LjI5NzQgNDIuMTQyMyAxOS42MTFDNDIuMDAxNCAyMC45MjQ2IDQzLjE2MzMgMjEuMjc5NiA0Ni4wODU1IDIxLjc0MTFDNDkuMDA3NiAyMi4yMDI2IDUxLjk2NSAyNC4wNDg4IDUxLjcxODYgMjcuNDkyNkM1MS40NzIxIDMwLjkzNjQgNDguNjkwOCAzMS42ODIgNDUuMDI5MyAzMS44OTQ5QzQyLjEgMzIuMDY1NCAzOS41MTM1IDMwLjkwMDggMzguNTg2NCAzMC4yOTczTDM5LjYwNzQgMjcuNDkyNkMzOS45OTQ3IDI3LjgzNTggNDEuMzI1NSAyOC41NzkgNDMuNTUwNSAyOC44MDYyQzQ2LjMzMTkgMjkuMDkwMiA0OC4yNjgzIDI4LjQ1MTIgNDguNDQ0NCAyNy4zNTA2QzQ4LjYyMDQgMjYuMjUgNDcuNTY0MSAyNS4xODQ5IDQ0LjM2MDMgMjQuNzIzNEM0MS4xNTY1IDI0LjI2MTggMzguOTM4NCAyMi43MzUzIDM4LjkwMzIgMTkuODI0QzM4Ljg2ODEgMTYuOTEyOCA0MC45ODA0IDE1LjEwMjEgNDUuMDY0NSAxNC45OTU2QzQ4LjMzMTcgMTQuOTEwNCA1MC42NzQxIDE2LjA3MjUgNTEuNDM2OSAxNi42NjQyWk01NS4yMzkzIDMxLjYxMDlWMTUuNDIxN0g1OC40NDMxVjMxLjYxMDlINTUuMjM5M1pNNjIuNTYyMyAzMS42MTA5VjE2LjQ1MTNDNjguNDIwOCAxMy42Mzk0IDcyLjA0NDcgMTUuNDY5IDczLjEyNDQgMTYuNzM1M0M3My42ODc4IDE2LjIwMjcgNzUuNzMgMTQuODE4MSA3OS4wNzQ3IDE1LjA2NjZDODIuNDE4NyAxNS4zMTUxIDg0Ljc0MjYgMTguMjk3NCA4NC43NDI2IDIyLjk4MzdWMzEuNjEwOUg4MS41MDM0VjIyLjA2MDdDODEuNTAzNCAxNi45NDgyIDc2LjI5MjggMTcuNjU4MyA3NC42MDMxIDE5LjE0OTRDNzQuODAyNiAxOS42MTA5IDc1LjIwMTYgMjEuMDI0IDc1LjIwMTYgMjIuOTgzN1YzMS42MTA5SDcxLjk2MjZWMjEuODQ3NkM3MS45NjI2IDE3LjM4ODUgNjcuODMxNiAxNy44MTIyIDY1Ljc2NjIgMTguNTgxNFYzMS42MTA5SDYyLjU2MjNaTTEwOC40NzIgOC45OTU2M1YyNS44MjM5QzEwOC40NzIgMjguNjI4NyAxMDkuNTk5IDI5LjYyMjggMTEyLjQxNiAyOC4zMDkxQzExMi43NTMgMjkuMjE4IDExMy4yODQgMzAuNTM0IDExMy41MDcgMzEuMDc4NEMxMTIuNzkxIDMxLjUwNDQgMTEwLjg1MiAzMi4yNDI5IDEwOC44MjQgMzEuNzg4NUMxMDYuMjg5IDMxLjIyMDQgMTA1LjIzMyAyOS4yNjc3IDEwNS4yNjggMjYuMDAxNUMxMDUuMjk3IDIzLjM4ODUgMTA1LjI4IDEzLjU3NTUgMTA1LjI2OCA4Ljk5NTYzSDEwOC40NzJaTTExNS40NDMgMzEuNjEwOVYxNS40NTcxSDExOC42MTJWMzEuNjEwOUgxMTUuNDQzWk0xMTYuOTU3IDguNzQ3MUMxMTcuNjI2IDguNzcwOCAxMTguOTcxIDkuMjA4NjEgMTE4Ljk5OSAxMC43NzA4QzExOS4wMjcgMTIuMzMyOSAxMTcuNjQ5IDEyLjc0NzEgMTE2Ljk1NyAxMi43NTg5QzExNi4zMjMgMTIuNzQ3MSAxMTUuMDQ5IDEyLjMzMjkgMTE1LjAyMSAxMC43NzA4QzExNC45OTMgOS4yMDg2MSAxMTYuMyA4Ljc3MDggMTE2Ljk1NyA4Ljc0NzFaTTg4LjIyOCAzOS43NDExVjE2LjQxNTdDODkuMDM3OCAxNS44NDc2IDkxLjI1NjEgMTQuOTI0NiA5NC44ODIzIDE1LjA2NjZDOTkuNDk0MSAxNS4yNDcyIDEwMS4zMjUgMTguNDM5MyAxMDEuNjc3IDIxLjgxMjJDMTAyLjAyOSAyNS4xODQ5IDEwMS42MDcgMjguODQxNyA5OC42ODUgMzAuODY1NEM5Ni4zNDY5IDMyLjQ4NDMgOTIuODk4OSAzMi4wMzY5IDkxLjQ2NzIgMzEuNjEwOVYzOS43NDExSDg4LjIyOFpNOTEuNDY3MiAyOC40ODY2VjE4LjY1MjRDOTIuMTM2MyAxOC4yMjYzIDkzLjAxNjQgMTguMDg3NiA5NC40MjUgMTguMDQ4OEM5Ny4zODIgMTguMDQ4OCA5OC41MDg0IDIwLjEwOCA5OC41NDM2IDIyLjk4MzdDOTguNTc4OCAyNS44NTk1IDk4LjE1NjYgMjguMzA5MSA5NS41NTE0IDI4Ljg0MTdDOTMuNDY3IDI5LjI2NzcgOTEuOTYwNCAyOC43ODI1IDkxLjQ2NzIgMjguNDg2NloiIGZpbGw9IiMwRTBFMEUiLz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF8yMjdfMjA1NiI+CjxyZWN0IHdpZHRoPSIxMTkiIGhlaWdodD0iNDAiIGZpbGw9IndoaXRlIi8+CjwvY2xpcFBhdGg+CjwvZGVmcz4KPC9zdmc+Cg==';
 var YT='https://www.youtube.com/watch?v=S0HXa4VJkvY';
 var THUMB='https://img.youtube.com/vi/S0HXa4VJkvY/hqdefault.jpg';
 var F="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;";
@@ -208,11 +209,11 @@ function sign(ps){
 function thumb(){
   return '<tr><td class="px" style="padding:0 40px 20px 40px;"><a href="'+YT+'" target="_blank"><img src="'+THUMB+'" alt="Watch Steve Stimson\'s story" width="520" style="display:block;width:100%;max-width:520px;height:auto;border:0;border-radius:8px;"></a></td></tr>';
 }
-function shell(subject,preview,rows){
+function shell(subject,preview,rows,logoSrc){
   return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<meta http-equiv="X-UA-Compatible" content="IE=edge">\n<title>'+subject+'</title>\n<style>\n@media only screen and (max-width:620px){\n.email-container{width:100%!important}\n.px{padding-left:24px!important;padding-right:24px!important}\n}\n</style>\n</head>\n<body style="margin:0;padding:0;background:#eef1f1;'+F+'">\n'+
   '<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#eef1f1;opacity:0;">'+preview+'&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;</div>\n'+
   '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0;padding:0;background:#eef1f1;"><tr><td align="center" style="padding:24px 12px;"><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" class="email-container" style="width:100%;max-width:600px;background:#ffffff;border-radius:14px;overflow:hidden;">'+
-  '<tr><td align="center" class="px" style="padding:30px 40px 6px 40px;"><img src="'+LOGO+'" alt="REsimpli" height="48" style="height:48px;width:auto;display:inline-block;border:0;margin:0;"></td></tr>'+
+  '<tr><td align="center" class="px" style="padding:30px 40px 6px 40px;"><img src="'+logoSrc+'" alt="REsimpli" width="143" height="48" style="height:48px;width:143px;display:inline-block;border:0;margin:0;"></td></tr>'+
   rows+
   '<tr><td align="center" class="px" style="padding:26px 40px 34px 40px;background:#ffffff;'+F+'text-align:center;"><p style="margin:0;font-size:12px;line-height:18px;color:#9aa7a7;text-align:center;"><a href="{{email.unsubscribe_link}}" style="color:#9aa7a7;text-decoration:underline;mso-style-textfill-fill-color:#9aa7a7;"><!--[if mso]><font color="#9aa7a7"><![endif]-->Unsubscribe<!--[if mso]></font><![endif]--></a>&nbsp;&middot;&nbsp;{{location.full_address}}</p></td></tr>'+
   '</table></td></tr></table>\n</body>\n</html>';
@@ -290,7 +291,9 @@ var EMAILS=[
 function buildHTML(i,forCopy){
   var e=EMAILS[i];
   var L=function(k){var u=(urls[k]||'').trim();return u?u:(forCopy?'#REPLACE-'+k:'#')};
-  var html=shell(e.subject,e.preview,e.rows(L));
+  var logoUrl=(urls.logo||'').trim();
+  var logoSrc=forCopy?(logoUrl||'#REPLACE-logo'):LOGO_SVG;
+  var html=shell(e.subject,e.preview,e.rows(L),logoSrc);
   if(forCopy) html=html.replace(/ data-link="[a-z]+"/g,'');
   return html;
 }
@@ -300,7 +303,6 @@ function missingFor(i){
 }
 
 /* preview-only image placeholders (outside images can't load in this viewer) */
-var LOGO_PH='data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="190" height="48" viewBox="0 0 190 48"><rect width="190" height="48" rx="8" fill="#e3f1f1"/><text x="95" y="31" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="20" font-weight="700" fill="#008088">REsimpli logo</text></svg>');
 var THUMB_PH='data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="520" height="292" viewBox="0 0 520 292"><rect width="520" height="292" rx="8" fill="#1f2d2d"/><circle cx="260" cy="132" r="34" fill="#008088"/><path d="M250 114 L250 150 L280 132 Z" fill="#fff"/><text x="260" y="210" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="17" fill="#cfe3e3">Video thumbnail: Steve Stimson</text></svg>');
 
 /* ---------- UI ---------- */
@@ -339,7 +341,7 @@ function updateBadge(){
 }
 function refresh(keepScroll){
   var e=EMAILS[cur];
-  var html=buildHTML(cur,false).split(LOGO).join(LOGO_PH).split(THUMB).join(THUMB_PH);
+  var html=buildHTML(cur,false).split(THUMB).join(THUMB_PH);
   frame.onload=function(){
     try{
       var doc=frame.contentDocument;
