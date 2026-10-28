@@ -39,6 +39,8 @@ thead tr:last-child th{border-bottom:1px solid var(--line)}
 th.grp{text-align:center;border-left:1px solid var(--line)}
 td{padding:10px 12px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--grid)}
 tbody tr:last-child td{border-bottom:none}
+tfoot td{border-top:2px solid var(--line);border-bottom:none;font-weight:600;padding-top:12px}
+tfoot td.dates{font-weight:400}
 tbody tr:hover td{background:rgba(var(--accent-rgb),.04)}
 td.gs,th.gs{border-left:1px solid var(--line)}
 th.l,td.l{text-align:left}
@@ -81,6 +83,7 @@ footer{margin-top:28px;font-size:12.5px;color:var(--faint)}
             <tr><th class="l">Day</th><th class="l">Dates</th><th class="gs">Before</th><th>After</th><th>Change</th><th class="gs">Before</th><th>After</th><th>Change</th></tr>
           </thead>
           <tbody id="pairs"></tbody>
+          <tfoot id="total"></tfoot>
         </table>
       </div>
     </section>
@@ -114,6 +117,14 @@ B.forEach((r, i) => {
   });
   pairs.append(tr);
 });
+const totalRow = el('tr');
+totalRow.append(el('td', 'Total', 'l day'), el('td', md(B[0].d) + '–' + B[B.length - 1].d.getUTCDate() + ' → ' + md(A[0].d) + '–' + A[A.length - 1].d.getUTCDate(), 'l dates'));
+['impressions', 'clicks'].forEach(k => {
+  const tb = B.reduce((s, r) => s + r[k], 0), ta = A.reduce((s, r) => s + r[k], 0), ch = ta / tb - 1, td = el('td');
+  td.append(el('span', sp(ch), 'pill ' + cls(ch)));
+  totalRow.append(el('td', FMT[k](tb), 'gs'), el('td', FMT[k](ta), 'after'), td);
+});
+document.getElementById('total').append(totalRow);
 
 const NS = 'http://www.w3.org/2000/svg';
 const sv = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.append(e); return e; };
