@@ -67,7 +67,6 @@ footer{margin-top:28px;font-size:12.5px;color:var(--faint)}
 
   <main>
     <div class="charts">
-      <section class="card"><h2>Conversions</h2><p>Google Ads conversions per day (fractional from attribution).</p><div class="chart" data-metric="conversions"></div></section>
       <section class="card"><h2>Clicks</h2><p>Clicks on brand search ads per day.</p><div class="chart" data-metric="clicks"></div></section>
       <section class="card"><h2>Impressions</h2><p>Times brand ads showed per day, a proxy for brand search volume.</p><div class="chart" data-metric="impressions"></div></section>
     </div>
@@ -78,8 +77,8 @@ footer{margin-top:28px;font-size:12.5px;color:var(--faint)}
       <div class="scroll">
         <table>
           <thead>
-            <tr><th class="l" colspan="2"></th><th class="grp" colspan="3">Impressions</th><th class="grp" colspan="3">Clicks</th><th class="grp" colspan="3">Conversions</th></tr>
-            <tr><th class="l">Day</th><th class="l">Dates</th><th class="gs">Before</th><th>After</th><th>Change</th><th class="gs">Before</th><th>After</th><th>Change</th><th class="gs">Before</th><th>After</th><th>Change</th></tr>
+            <tr><th class="l" colspan="2"></th><th class="grp" colspan="3">Impressions</th><th class="grp" colspan="3">Clicks</th></tr>
+            <tr><th class="l">Day</th><th class="l">Dates</th><th class="gs">Before</th><th>After</th><th>Change</th><th class="gs">Before</th><th>After</th><th>Change</th></tr>
           </thead>
           <tbody id="pairs"></tbody>
         </table>
@@ -91,7 +90,7 @@ footer{margin-top:28px;font-size:12.5px;color:var(--faint)}
 </div>
 
 <script>
-const DATA = [{"day": "2026-10-13", "week": "before", "impressions": 273, "clicks": 113, "conversions": 5.0, "cost": 230.73, "daily_budget": 800.0, "impr_share": 0.9257, "lost_is_budget": 0.0, "lost_is_rank": 0.0743}, {"day": "2026-10-14", "week": "before", "impressions": 356, "clicks": 137, "conversions": 3.33, "cost": 260.92, "daily_budget": 800.0, "impr_share": 0.9596, "lost_is_budget": 0.0, "lost_is_rank": 0.0404}, {"day": "2026-10-15", "week": "before", "impressions": 301, "clicks": 121, "conversions": 3.67, "cost": 230.89, "daily_budget": 800.0, "impr_share": 0.9495, "lost_is_budget": 0.0, "lost_is_rank": 0.0505}, {"day": "2026-10-16", "week": "before", "impressions": 231, "clicks": 101, "conversions": 2.17, "cost": 201.01, "daily_budget": 800.0, "impr_share": 0.94, "lost_is_budget": 0.0, "lost_is_rank": 0.06}, {"day": "2026-10-17", "week": "before", "impressions": 86, "clicks": 41, "conversions": 3.0, "cost": 84.44, "daily_budget": 800.0, "impr_share": 0.8971, "lost_is_budget": 0.0, "lost_is_rank": 0.1029}, {"day": "2026-10-18", "week": "before", "impressions": 65, "clicks": 29, "conversions": 3.0, "cost": 55.57, "daily_budget": 800.0, "impr_share": 0.8387, "lost_is_budget": 0.0, "lost_is_rank": 0.1613}, {"day": "2026-10-19", "week": "before", "impressions": 318, "clicks": 108, "conversions": 1.0, "cost": 222.29, "daily_budget": 800.0, "impr_share": 0.9052, "lost_is_budget": 0.0, "lost_is_rank": 0.0948}, {"day": "2026-10-20", "week": "after", "impressions": 343, "clicks": 146, "conversions": 4.33, "cost": 319.24, "daily_budget": 800.0, "impr_share": 0.9638, "lost_is_budget": 0.0, "lost_is_rank": 0.0362}, {"day": "2026-10-21", "week": "after", "impressions": 326, "clicks": 128, "conversions": 5.67, "cost": 260.76, "daily_budget": 800.0, "impr_share": 0.9412, "lost_is_budget": 0.0, "lost_is_rank": 0.0588}, {"day": "2026-10-22", "week": "after", "impressions": 126, "clicks": 41, "conversions": 1.0, "cost": 77.73, "daily_budget": 800.0, "impr_share": 0.6637, "lost_is_budget": 0.2389, "lost_is_rank": 0.0973}, {"day": "2026-10-23", "week": "after", "impressions": 200, "clicks": 62, "conversions": 2.0, "cost": 123.76, "daily_budget": 800.0, "impr_share": 0.9104, "lost_is_budget": 0.0, "lost_is_rank": 0.0896}, {"day": "2026-10-24", "week": "after", "impressions": 57, "clicks": 13, "conversions": 0.0, "cost": 28.86, "daily_budget": 800.0, "impr_share": 0.8125, "lost_is_budget": 0.0, "lost_is_rank": 0.1875}, {"day": "2026-10-25", "week": "after", "impressions": 68, "clicks": 17, "conversions": 0.0, "cost": 37.4, "daily_budget": 800.0, "impr_share": 0.8542, "lost_is_budget": 0.0, "lost_is_rank": 0.1458}, {"day": "2026-10-26", "week": "after", "impressions": 175, "clicks": 55, "conversions": 1.0, "cost": 108.77, "daily_budget": 800.0, "impr_share": 0.845, "lost_is_budget": 0.0, "lost_is_rank": 0.155}];
+const DATA = [{"day": "2026-10-13", "week": "before", "impressions": 273, "clicks": 113, "cost": 230.73, "daily_budget": 800.0, "impr_share": 0.9257, "lost_is_budget": 0.0, "lost_is_rank": 0.0743}, {"day": "2026-10-14", "week": "before", "impressions": 356, "clicks": 137, "cost": 260.92, "daily_budget": 800.0, "impr_share": 0.9596, "lost_is_budget": 0.0, "lost_is_rank": 0.0404}, {"day": "2026-10-15", "week": "before", "impressions": 301, "clicks": 121, "cost": 230.89, "daily_budget": 800.0, "impr_share": 0.9495, "lost_is_budget": 0.0, "lost_is_rank": 0.0505}, {"day": "2026-10-16", "week": "before", "impressions": 231, "clicks": 101, "cost": 201.01, "daily_budget": 800.0, "impr_share": 0.94, "lost_is_budget": 0.0, "lost_is_rank": 0.06}, {"day": "2026-10-17", "week": "before", "impressions": 86, "clicks": 41, "cost": 84.44, "daily_budget": 800.0, "impr_share": 0.8971, "lost_is_budget": 0.0, "lost_is_rank": 0.1029}, {"day": "2026-10-18", "week": "before", "impressions": 65, "clicks": 29, "cost": 55.57, "daily_budget": 800.0, "impr_share": 0.8387, "lost_is_budget": 0.0, "lost_is_rank": 0.1613}, {"day": "2026-10-19", "week": "before", "impressions": 318, "clicks": 108, "cost": 222.29, "daily_budget": 800.0, "impr_share": 0.9052, "lost_is_budget": 0.0, "lost_is_rank": 0.0948}, {"day": "2026-10-20", "week": "after", "impressions": 343, "clicks": 146, "cost": 319.24, "daily_budget": 800.0, "impr_share": 0.9638, "lost_is_budget": 0.0, "lost_is_rank": 0.0362}, {"day": "2026-10-21", "week": "after", "impressions": 326, "clicks": 128, "cost": 260.76, "daily_budget": 800.0, "impr_share": 0.9412, "lost_is_budget": 0.0, "lost_is_rank": 0.0588}, {"day": "2026-10-22", "week": "after", "impressions": 126, "clicks": 41, "cost": 77.73, "daily_budget": 800.0, "impr_share": 0.6637, "lost_is_budget": 0.2389, "lost_is_rank": 0.0973}, {"day": "2026-10-23", "week": "after", "impressions": 200, "clicks": 62, "cost": 123.76, "daily_budget": 800.0, "impr_share": 0.9104, "lost_is_budget": 0.0, "lost_is_rank": 0.0896}, {"day": "2026-10-24", "week": "after", "impressions": 57, "clicks": 13, "cost": 28.86, "daily_budget": 800.0, "impr_share": 0.8125, "lost_is_budget": 0.0, "lost_is_rank": 0.1875}, {"day": "2026-10-25", "week": "after", "impressions": 68, "clicks": 17, "cost": 37.4, "daily_budget": 800.0, "impr_share": 0.8542, "lost_is_budget": 0.0, "lost_is_rank": 0.1458}, {"day": "2026-10-26", "week": "after", "impressions": 175, "clicks": 55, "cost": 108.77, "daily_budget": 800.0, "impr_share": 0.845, "lost_is_budget": 0.0, "lost_is_rank": 0.155}];
 const CUT = '2026-10-19', CUT_PCT = 0.75, MINUS = '\u2212';
 const rows = DATA.slice().sort((a, b) => a.day < b.day ? -1 : 1).map(r => ({...r, d: new Date(r.day + 'T00:00:00Z')}));
 const B = rows.filter(r => r.week === 'before'), A = rows.filter(r => r.week === 'after');
@@ -102,13 +101,13 @@ const md = d => d.toLocaleDateString('en-US', {month: 'short', day: 'numeric', t
 const wd = d => d.toLocaleDateString('en-US', {weekday: 'short', timeZone: 'UTC'});
 const cls = v => v < 0 ? 'down' : v > 0 ? 'up' : 'flat';
 const el = (tag, text, c) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (c) e.className = c; return e; };
-const FMT = {impressions: v => nf.format(v), clicks: v => nf.format(v), conversions: v => v.toFixed(2)};
+const FMT = {impressions: v => nf.format(v), clicks: v => nf.format(v)};
 
 const pairs = document.getElementById('pairs');
 B.forEach((r, i) => {
   const a = A[i], tr = el('tr');
   tr.append(el('td', wd(r.d), 'l day'), el('td', md(r.d) + ' → ' + md(a.d), 'l dates'));
-  ['impressions', 'clicks', 'conversions'].forEach(k => {
+  ['impressions', 'clicks'].forEach(k => {
     const ch = a[k] / r[k] - 1, td = el('td');
     td.append(el('span', sp(ch), 'pill ' + cls(ch)));
     tr.append(el('td', FMT[k](r[k]), 'gs'), el('td', FMT[k](a[k]), 'after'), td);
